@@ -16,6 +16,39 @@ return [
         'years_founded' => 2001,
     ],
 
+    // Hero principal
+    'hero' => [
+        'badge' => '✨ Holding Empresarial Innovador',
+        'title_line_1' => 'Construyendo el Futuro',
+        'title_highlight' => 'Juntos',
+        'description' => 'Tucu Group es un holding empresarial que integra negocios innovadores con impacto en la sociedad y la industria. Más de 25 años de experiencia y excelencia.',
+        'cta_text' => 'Explorar Empresas',
+        'cta_link' => '#empresas',
+    ],
+
+    // Slider superior
+    'slider' => [
+        'enabled' => true,
+        'autoplay_ms' => 5000,
+        'items' => [
+            [
+                'title' => 'Innovación en movimiento',
+                'subtitle' => 'Soluciones industriales y tecnológicas para crecer',
+                'image' => 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1600&q=80',
+            ],
+            [
+                'title' => 'Calidad con visión global',
+                'subtitle' => 'Presencia internacional y compromiso local',
+                'image' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80',
+            ],
+            [
+                'title' => 'Un holding, múltiples oportunidades',
+                'subtitle' => 'Integramos sectores para generar impacto real',
+                'image' => 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80',
+            ],
+        ],
+    ],
+
     // Empresas del holding
     'companies' => [
         [
@@ -180,5 +213,10 @@ return [
         'keywords' => 'Tucu Group, holding, empresarial, innovación, Tucu Roller, Argentina',
         'author' => 'Tucu Group',
         'og_image' => '/images/og-image.jpg',
+    ],
+
+    // Integraciones externas
+    'integrations' => [
+        'google_analytics_id' => '',
     ],
 ];

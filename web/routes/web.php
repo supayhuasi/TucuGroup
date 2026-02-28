@@ -1,12 +1,11 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\InstitutionalController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('institutional');
-});
+Route::get('/', [InstitutionalController::class, 'index'])->name('institutional');
 
 Route::get('/welcome', function () {
     return view('welcome');

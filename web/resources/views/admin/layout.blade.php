@@ -37,7 +37,7 @@
                         <a href="{{ route('admin.settings') }}" 
                            class="block px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition
                            @if(Route::currentRouteName() === 'admin.settings') bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 @endif">
-                            ⚙️ Configuración
+                            ⚙️ Contenido del sitio
                         </a>
                     </li>
                 </ul>

@@ -1,0 +1,65 @@
+GUÍA RÁPIDA - MÓDULO DE ADMINISTRACIÓN
+======================================
+
+1️⃣ INSTALACIÓN RÁPIDA
+──────────────────────
+
+```bash
+# Ejecutar migraciones
+php artisan migrate
+
+# (Opcional) Crear usuarios de prueba
+php artisan db:seed
+```
+
+2️⃣ ACCESO AL PANEL
+───────────────────
+
+Después de instalar, inicia sesión con:
+
+Email: admin@example.com
+Contraseña: password
+
+Luego ve a: http://tu-app.local/admin/dashboard
+
+3️⃣ LO QUE PUEDES HACER
+──────────────────────
+
+✨ Dashboard         → Ver estadísticas de usuarios
+👥 Gestionar         → Ver, editar, eliminar usuarios
+🔑 Cambiar Roles     → Hacer admin o quitar admin
+⚙️  Configuración    → Ver info del sistema
+
+4️⃣ CARACTERÍSTICAS PRINCIPALES
+───────────────────────────────
+
+✅ Panel de control con estadísticas en tiempo real
+✅ Gestión completa de usuarios
+✅ Sistema de roles (admin/usuario)
+✅ Control de acceso protegido
+✅ Interfaz responsive y dark mode
+✅ Validaciones de seguridad
+
+5️⃣ ARCHIVOS CREADOS/MODIFICADOS
+────────────────────────────────
+
+app/Http/Controllers/AdminController.php
+app/Http/Middleware/IsAdmin.php
+routes/web.php (modificado)
+app/Models/User.php (modificado)
+bootstrap/app.php (modificado)
+database/migrations/2026_02_28_000000_add_role_to_users_table.php
+database/seeders/DatabaseSeeder.php (modificado)
+
+resources/views/admin/layout.blade.php
+resources/views/admin/dashboard.blade.php
+resources/views/admin/users.blade.php
+resources/views/admin/edit-user.blade.php
+resources/views/admin/settings.blade.php
+
+6️⃣ DOCUMENTACIÓN COMPLETA
+─────────────────────────
+
+Ver: ADMIN_MODULE.md
+
+Creado: 28 de Febrero de 2026

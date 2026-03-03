@@ -396,6 +396,9 @@
             }, intervalMs);
         }
     </script>
+
+    {{-- Botón Flotante WhatsApp --}}
+    <x-whatsapp-button />
 </body>
 </html>
 

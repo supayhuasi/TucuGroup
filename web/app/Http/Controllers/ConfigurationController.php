@@ -261,10 +261,30 @@ class ConfigurationController extends Controller
     public function saveSectors(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'sectors' => 'required|json',
+            'sectors_items' => 'required|array|min:1',
+            'sectors_items.*.id' => 'required|integer|min:1',
+            'sectors_items.*.title' => 'required|string|max:255',
+            'sectors_items.*.subtitle' => 'required|string|max:500',
+            'sectors_items.*.icon' => 'required|string|max:100',
+            'sectors_items.*.color' => 'required|string|max:100',
+            'sectors_items.*.features_text' => 'required|string|max:2000',
         ]);
 
-        SiteSetting::putValue('sectors_config', json_decode($validated['sectors'], true));
+        $sectors = array_map(static function (array $sector): array {
+            $features = preg_split('/\r\n|\r|\n/', (string) $sector['features_text']);
+            $features = array_values(array_filter(array_map('trim', $features), static fn (string $item): bool => $item !== ''));
+
+            return [
+                'id' => (int) $sector['id'],
+                'title' => trim($sector['title']),
+                'subtitle' => trim($sector['subtitle']),
+                'icon' => trim($sector['icon']),
+                'color' => trim($sector['color']),
+                'features' => $features,
+            ];
+        }, $validated['sectors_items']);
+
+        SiteSetting::putValue('sectors_config', $sectors);
 
         return redirect()->route('configuration.dashboard')
             ->with('success', 'Sectores actualizados correctamente.');

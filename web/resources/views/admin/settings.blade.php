@@ -20,6 +20,8 @@
         @php
             $companiesFromOld = old('companies_json');
             $companiesData = $content['companies'] ?? [];
+            $sectorsFromOld = old('sectors_json');
+            $sectorsData = $content['sectors'] ?? [];
 
             if (is_string($companiesFromOld) && trim($companiesFromOld) !== '') {
                 $decodedCompanies = json_decode($companiesFromOld, true);
@@ -37,6 +39,24 @@
                     'icon' => '',
                     'color' => '',
                     'status' => '',
+                ]];
+            }
+
+            if (is_string($sectorsFromOld) && trim($sectorsFromOld) !== '') {
+                $decodedSectors = json_decode($sectorsFromOld, true);
+                if (is_array($decodedSectors)) {
+                    $sectorsData = $decodedSectors;
+                }
+            }
+
+            if (!is_array($sectorsData) || empty($sectorsData)) {
+                $sectorsData = [[
+                    'id' => 1,
+                    'title' => '',
+                    'subtitle' => '',
+                    'icon' => '',
+                    'color' => '',
+                    'features' => [],
                 ]];
             }
         @endphp
@@ -173,7 +193,16 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sectores</label>
-                        <textarea name="sectors_json" rows="8" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 font-mono text-sm">{{ old('sectors_json', json_encode($content['sectors'] ?? [], JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)) }}</textarea>
+                        <div id="sectors-editor" class="space-y-4" data-initial='@json($sectorsData)'>
+                            <div id="sectors-list" class="space-y-4"></div>
+                            <div class="flex justify-between items-center">
+                                <button type="button" id="add-sector-btn" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-lg transition">
+                                    + Agregar sector
+                                </button>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Edición visual activada, sin JSON manual.</p>
+                            </div>
+                            <input type="hidden" id="sectors_json_hidden" name="sectors_json" value='@json($sectorsData, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)'>
+                        </div>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estadísticas</label>
@@ -204,6 +233,10 @@
         const list = document.getElementById('companies-list');
         const addButton = document.getElementById('add-company-btn');
         const hiddenInput = document.getElementById('companies_json_hidden');
+        const sectorsEditor = document.getElementById('sectors-editor');
+        const sectorsList = document.getElementById('sectors-list');
+        const addSectorButton = document.getElementById('add-sector-btn');
+        const sectorsHiddenInput = document.getElementById('sectors_json_hidden');
 
         if (!editor || !list || !addButton || !hiddenInput) {
             return;
@@ -291,6 +324,112 @@
         });
 
         render();
+
+        if (!sectorsEditor || !sectorsList || !addSectorButton || !sectorsHiddenInput) {
+            return;
+        }
+
+        let sectors = [];
+
+        try {
+            const initialSectors = JSON.parse(sectorsEditor.dataset.initial || '[]');
+            sectors = Array.isArray(initialSectors) ? initialSectors : [];
+        } catch (error) {
+            sectors = [];
+        }
+
+        if (sectors.length === 0) {
+            sectors = [{ id: 1, title: '', subtitle: '', icon: '', color: '', features: [] }];
+        }
+
+        const toFeaturesText = (features) => {
+            if (!Array.isArray(features)) {
+                return '';
+            }
+
+            return features.join('\n');
+        };
+
+        const parseFeatures = (value) => {
+            return String(value || '')
+                .split(/\r\n|\r|\n/)
+                .map(item => item.trim())
+                .filter(item => item !== '');
+        };
+
+        const getSectorCardHtml = (sector, index) => {
+            const safe = (value) => String(value ?? '').replace(/"/g, '&quot;');
+
+            return `
+                <div class="p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
+                    <div class="flex items-center justify-between mb-3">
+                        <h5 class="font-semibold text-gray-800 dark:text-white">Sector #${index + 1}</h5>
+                        <button type="button" data-sector-remove="${index}" class="text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Eliminar</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input data-sector-field="id" data-sector-index="${index}" type="number" min="1" value="${safe(sector.id)}" placeholder="ID" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <input data-sector-field="title" data-sector-index="${index}" type="text" value="${safe(sector.title)}" placeholder="Título" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <input data-sector-field="subtitle" data-sector-index="${index}" type="text" value="${safe(sector.subtitle)}" placeholder="Subtítulo" class="md:col-span-2 w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <input data-sector-field="icon" data-sector-index="${index}" type="text" value="${safe(sector.icon)}" placeholder="Ícono" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <input data-sector-field="color" data-sector-index="${index}" type="text" value="${safe(sector.color)}" placeholder="Color" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <textarea data-sector-field="features_text" data-sector-index="${index}" rows="4" placeholder="Características (una por línea)" class="md:col-span-2 w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">${safe(toFeaturesText(sector.features))}</textarea>
+                    </div>
+                </div>
+            `;
+        };
+
+        const syncSectorsHidden = () => {
+            sectorsHiddenInput.value = JSON.stringify(sectors);
+        };
+
+        const renderSectors = () => {
+            sectorsList.innerHTML = sectors.map((sector, index) => getSectorCardHtml(sector, index)).join('');
+            syncSectorsHidden();
+        };
+
+        addSectorButton.addEventListener('click', function () {
+            const maxId = sectors.reduce((carry, sector) => {
+                const current = Number(sector.id) || 0;
+                return current > carry ? current : carry;
+            }, 0);
+
+            sectors.push({ id: maxId + 1, title: '', subtitle: '', icon: '', color: '', features: [] });
+            renderSectors();
+        });
+
+        sectorsList.addEventListener('click', function (event) {
+            const button = event.target.closest('[data-sector-remove]');
+            if (!button) {
+                return;
+            }
+
+            const index = Number(button.getAttribute('data-sector-remove'));
+            if (sectors.length === 1) {
+                return;
+            }
+
+            sectors.splice(index, 1);
+            renderSectors();
+        });
+
+        sectorsList.addEventListener('input', function (event) {
+            const field = event.target.getAttribute('data-sector-field');
+            const index = Number(event.target.getAttribute('data-sector-index'));
+
+            if (!field || Number.isNaN(index) || !sectors[index]) {
+                return;
+            }
+
+            if (field === 'features_text') {
+                sectors[index].features = parseFeatures(event.target.value);
+            } else {
+                sectors[index][field] = event.target.value;
+            }
+
+            syncSectorsHidden();
+        });
+
+        renderSectors();
     });
 </script>
 @endsection

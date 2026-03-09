@@ -791,26 +791,118 @@
 
             {{-- Sectores --}}
             <x-accordion-item id="8" title="🏭 Gestión de Sectores">
-                <form method="POST" action="{{ route('configuration.sectors') }}" class="space-y-6">
+                @php
+                    $sectorsInitial = old('sectors_items');
+
+                    if (!is_array($sectorsInitial)) {
+                        $sectorsInitial = array_map(static function ($sector) {
+                            return [
+                                'id' => $sector['id'] ?? '',
+                                'title' => $sector['title'] ?? '',
+                                'subtitle' => $sector['subtitle'] ?? '',
+                                'icon' => $sector['icon'] ?? '',
+                                'color' => $sector['color'] ?? '',
+                                'features_text' => implode("\n", $sector['features'] ?? []),
+                            ];
+                        }, is_array($config['sectors']) ? $config['sectors'] : []);
+                    }
+
+                    if (empty($sectorsInitial)) {
+                        $sectorsInitial = [[
+                            'id' => 1,
+                            'title' => '',
+                            'subtitle' => '',
+                            'icon' => '',
+                            'color' => '',
+                            'features_text' => '',
+                        ]];
+                    }
+                @endphp
+
+                <form method="POST" action="{{ route('configuration.sectors') }}" class="space-y-6" x-data='{
+                    sectors: @json($sectorsInitial),
+                    addSector() {
+                        const lastId = this.sectors.length > 0
+                            ? Math.max(...this.sectors.map(sector => Number(sector.id) || 0))
+                            : 0;
+
+                        this.sectors.push({
+                            id: lastId + 1,
+                            title: "",
+                            subtitle: "",
+                            icon: "",
+                            color: "",
+                            features_text: ""
+                        });
+                    },
+                    removeSector(index) {
+                        this.sectors.splice(index, 1);
+                    }
+                }'>
                     @csrf
 
                     <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
-                        Ingresa la configuración de sectores en formato JSON. Se debe incluir: id, title, subtitle, icon, color y features (array).
+                        Carga los sectores desde este formulario visual. En características, escribe una por línea.
                     </p>
 
-                    <textarea
-                        name="sectors"
-                        rows="12"
-                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
-                        placeholder='[{"id": 1, "title": "Sector 1", "subtitle": "Descripción", "icon": "factory", "color": "orange", "features": ["Feature 1", "Feature 2"]}]'
-                    >{{ old('sectors', json_encode($config['sectors'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)) }}</textarea>
-
-                    @error('sectors')
+                    @error('sectors_items')
                         <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
                     @enderror
 
-                    {{-- Botón Guardar --}}
-                    <div class="flex justify-end">
+                    <div class="space-y-4">
+                        <template x-for="(sector, index) in sectors" :key="index">
+                            <div class="p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h4 class="font-semibold text-gray-800 dark:text-gray-100" x-text="`Sector #${index + 1}`"></h4>
+                                    <button
+                                        type="button"
+                                        x-show="sectors.length > 1"
+                                        @click="removeSector(index)"
+                                        class="px-3 py-1 text-sm rounded-lg bg-red-600 hover:bg-red-700 text-white"
+                                    >
+                                        Eliminar
+                                    </button>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">ID</label>
+                                        <input type="number" min="1" x-model="sector.id" :name="`sectors_items[${index}][id]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Título</label>
+                                        <input type="text" x-model="sector.title" :name="`sectors_items[${index}][title]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subtítulo</label>
+                                        <input type="text" x-model="sector.subtitle" :name="`sectors_items[${index}][subtitle]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ícono</label>
+                                        <input type="text" x-model="sector.icon" :name="`sectors_items[${index}][icon]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="factory, code, ...">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Color</label>
+                                        <input type="text" x-model="sector.color" :name="`sectors_items[${index}][color]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="orange, blue, ...">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Características (una por línea)</label>
+                                        <textarea rows="4" x-model="sector.features_text" :name="`sectors_items[${index}][features_text]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <button
+                            type="button"
+                            @click="addSector()"
+                            class="px-4 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded-lg transition-colors"
+                        >
+                            + Agregar Sector
+                        </button>
+
                         <button
                             type="submit"
                             class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"

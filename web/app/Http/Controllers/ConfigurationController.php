@@ -229,6 +229,7 @@ class ConfigurationController extends Controller
             'companies_items.*.website' => 'required|string|max:255',
             'companies_items.*.icon' => 'required|string|max:100',
             'companies_items.*.color' => 'required|string|max:100',
+            'companies_items.*.logo' => 'nullable|string|max:2048',
             'companies_items.*.status' => 'nullable|string|max:100',
         ]);
 
@@ -241,6 +242,10 @@ class ConfigurationController extends Controller
                 'icon' => trim($company['icon']),
                 'color' => trim($company['color']),
             ];
+
+            if (!empty($company['logo'])) {
+                $normalized['logo'] = trim($company['logo']);
+            }
 
             if (!empty($company['status'])) {
                 $normalized['status'] = trim($company['status']);

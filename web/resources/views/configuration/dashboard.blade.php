@@ -685,6 +685,7 @@
                             'website' => '',
                             'icon' => '',
                             'color' => '',
+                            'logo' => '',
                             'status' => '',
                         ]];
                     }
@@ -704,6 +705,7 @@
                             website: "",
                             icon: "",
                             color: "",
+                            logo: "",
                             status: ""
                         });
                     },
@@ -760,6 +762,10 @@
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Color</label>
                                         <input type="text" x-model="company.color" :name="`companies_items[${index}][color]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="gradient-primary, blue, ...">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Logo (URL)</label>
+                                        <input type="text" x-model="company.logo" :name="`companies_items[${index}][logo]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="https://... o /storage/...">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estado (opcional)</label>

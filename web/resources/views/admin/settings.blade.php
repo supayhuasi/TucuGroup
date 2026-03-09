@@ -44,6 +44,7 @@
                     'website' => '',
                     'icon' => '',
                     'color' => '',
+                    'logo' => '',
                     'status' => '',
                 ]];
             }
@@ -341,7 +342,7 @@
         }
 
         if (companies.length === 0) {
-            companies = [{ id: 1, name: '', description: '', website: '', icon: '', color: '', status: '' }];
+            companies = [{ id: 1, name: '', description: '', website: '', icon: '', color: '', logo: '', status: '' }];
         }
 
         const getCardHtml = (company, index) => {
@@ -360,6 +361,7 @@
                         <input data-field="website" data-index="${index}" type="text" value="${safe(company.website)}" placeholder="Sitio web (https://... o #)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
                         <input data-field="icon" data-index="${index}" type="text" value="${safe(company.icon)}" placeholder="Ícono" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
                         <input data-field="color" data-index="${index}" type="text" value="${safe(company.color)}" placeholder="Color" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <input data-field="logo" data-index="${index}" type="text" value="${safe(company.logo)}" placeholder="Logo (https://... o /storage/...)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
                         <input data-field="status" data-index="${index}" type="text" value="${safe(company.status)}" placeholder="Estado (opcional)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
                     </div>
                 </div>
@@ -381,7 +383,7 @@
                 return current > carry ? current : carry;
             }, 0);
 
-            companies.push({ id: maxId + 1, name: '', description: '', website: '', icon: '', color: '', status: '' });
+            companies.push({ id: maxId + 1, name: '', description: '', website: '', icon: '', color: '', logo: '', status: '' });
             render();
         });
 

@@ -188,7 +188,13 @@
             <div class="grid md:grid-cols-3 gap-8">
                 @foreach($companies as $company)
                     <div class="bg-white dark:bg-[#1a1a1a] rounded-2xl p-8 border border-gray-200 dark:border-gray-700 card-hover">
-                        <div class="icon-box gradient-primary text-white">🏢</div>
+                        @if(!empty($company['logo']))
+                            <div class="mb-6 h-16 w-28 flex items-center justify-start">
+                                <img src="{{ $company['logo'] }}" alt="Logo {{ $company['name'] ?? 'empresa' }}" class="max-h-16 max-w-full object-contain">
+                            </div>
+                        @else
+                            <div class="icon-box gradient-primary text-white">🏢</div>
+                        @endif
                         <h3 class="text-2xl font-bold mb-3">{{ $company['name'] ?? '' }}</h3>
                         <p class="text-gray-600 dark:text-gray-400 mb-4">{{ $company['description'] ?? '' }}</p>
                         @if(!empty($company['website']) && $company['website'] !== '#')

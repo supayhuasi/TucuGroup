@@ -26,6 +26,8 @@
             $statisticsData = $content['statistics'] ?? [];
             $valuesFromOld = old('values_json');
             $valuesData = $content['values'] ?? [];
+            $sliderItemsFromOld = old('slider.items_json');
+            $sliderItemsData = $content['slider']['items'] ?? [];
 
             if (is_string($companiesFromOld) && trim($companiesFromOld) !== '') {
                 $decodedCompanies = json_decode($companiesFromOld, true);
@@ -93,6 +95,21 @@
                     'color' => '',
                 ]];
             }
+
+            if (is_string($sliderItemsFromOld) && trim($sliderItemsFromOld) !== '') {
+                $decodedSliderItems = json_decode($sliderItemsFromOld, true);
+                if (is_array($decodedSliderItems)) {
+                    $sliderItemsData = $decodedSliderItems;
+                }
+            }
+
+            if (!is_array($sliderItemsData) || empty($sliderItemsData)) {
+                $sliderItemsData = [[
+                    'title' => '',
+                    'subtitle' => '',
+                    'image' => '',
+                ]];
+            }
         @endphp
 
         <form action="{{ route('admin.settings.save') }}" method="POST" class="space-y-8">
@@ -158,9 +175,17 @@
                         <input type="number" min="1500" max="20000" name="slider[autoplay_ms]" value="{{ old('slider.autoplay_ms', $content['slider']['autoplay_ms'] ?? 5000) }}" class="w-full md:w-72 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Slides (JSON)</label>
-                        <textarea name="slider[items_json]" rows="7" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 font-mono text-sm">{{ old('slider.items_json', json_encode($content['slider']['items'] ?? [], JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)) }}</textarea>
-                        <p class="text-xs text-gray-500 mt-1">Formato: [{"title":"...","subtitle":"...","image":"https://..."}]</p>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Slides</label>
+                        <div id="slider-editor" class="space-y-4" data-initial='@json($sliderItemsData)'>
+                            <div id="slider-list" class="space-y-4"></div>
+                            <div class="flex justify-between items-center">
+                                <button type="button" id="add-slide-btn" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-lg transition">
+                                    + Agregar slide
+                                </button>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Edición visual activada, sin JSON manual.</p>
+                            </div>
+                            <input type="hidden" id="slider_items_json_hidden" name="slider[items_json]" value='@json($sliderItemsData, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)'>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -297,6 +322,10 @@
         const valuesList = document.getElementById('values-list');
         const addValueButton = document.getElementById('add-value-btn');
         const valuesHiddenInput = document.getElementById('values_json_hidden');
+        const sliderEditor = document.getElementById('slider-editor');
+        const sliderList = document.getElementById('slider-list');
+        const addSlideButton = document.getElementById('add-slide-btn');
+        const sliderItemsHiddenInput = document.getElementById('slider_items_json_hidden');
 
         if (!editor || !list || !addButton || !hiddenInput) {
             return;
@@ -384,6 +413,84 @@
         });
 
         render();
+
+        if (!sliderEditor || !sliderList || !addSlideButton || !sliderItemsHiddenInput) {
+            return;
+        }
+
+        let sliderItems = [];
+
+        try {
+            const initialSliderItems = JSON.parse(sliderEditor.dataset.initial || '[]');
+            sliderItems = Array.isArray(initialSliderItems) ? initialSliderItems : [];
+        } catch (error) {
+            sliderItems = [];
+        }
+
+        if (sliderItems.length === 0) {
+            sliderItems = [{ title: '', subtitle: '', image: '' }];
+        }
+
+        const getSlideCardHtml = (slide, index) => {
+            const safe = (value) => String(value ?? '').replace(/"/g, '&quot;');
+
+            return `
+                <div class="p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
+                    <div class="flex items-center justify-between mb-3">
+                        <h5 class="font-semibold text-gray-800 dark:text-white">Slide #${index + 1}</h5>
+                        <button type="button" data-slide-remove="${index}" class="text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Eliminar</button>
+                    </div>
+                    <div class="grid grid-cols-1 gap-3">
+                        <input data-slide-field="title" data-slide-index="${index}" type="text" value="${safe(slide.title)}" placeholder="Título" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <input data-slide-field="subtitle" data-slide-index="${index}" type="text" value="${safe(slide.subtitle)}" placeholder="Subtítulo" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <input data-slide-field="image" data-slide-index="${index}" type="text" value="${safe(slide.image)}" placeholder="URL de imagen (https://...)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                    </div>
+                </div>
+            `;
+        };
+
+        const syncSliderHidden = () => {
+            sliderItemsHiddenInput.value = JSON.stringify(sliderItems);
+        };
+
+        const renderSlider = () => {
+            sliderList.innerHTML = sliderItems.map((slide, index) => getSlideCardHtml(slide, index)).join('');
+            syncSliderHidden();
+        };
+
+        addSlideButton.addEventListener('click', function () {
+            sliderItems.push({ title: '', subtitle: '', image: '' });
+            renderSlider();
+        });
+
+        sliderList.addEventListener('click', function (event) {
+            const button = event.target.closest('[data-slide-remove]');
+            if (!button) {
+                return;
+            }
+
+            const index = Number(button.getAttribute('data-slide-remove'));
+            if (sliderItems.length === 1) {
+                return;
+            }
+
+            sliderItems.splice(index, 1);
+            renderSlider();
+        });
+
+        sliderList.addEventListener('input', function (event) {
+            const field = event.target.getAttribute('data-slide-field');
+            const index = Number(event.target.getAttribute('data-slide-index'));
+
+            if (!field || Number.isNaN(index) || !sliderItems[index]) {
+                return;
+            }
+
+            sliderItems[index][field] = event.target.value;
+            syncSliderHidden();
+        });
+
+        renderSlider();
 
         if (!sectorsEditor || !sectorsList || !addSectorButton || !sectorsHiddenInput) {
             return;

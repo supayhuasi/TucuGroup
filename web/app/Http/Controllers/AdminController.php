@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -139,12 +140,29 @@ class AdminController extends Controller
             'slider.autoplay_ms' => 'required|integer|min:1500|max:20000',
             'slider.items_json' => 'required|string',
             'companies_json' => 'required|string',
+            'companies_logo_files.*' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
             'sectors_json' => 'required|string',
             'statistics_json' => 'required|string',
             'values_json' => 'required|string',
         ], [
             'integrations.google_analytics_id.regex' => 'El ID de Google Analytics debe tener formato G-XXXXXXXXXX.',
         ]);
+
+        $companies = $this->decodeJsonArray($validated['companies_json'], 'companies_json', 'empresas');
+
+        foreach ($companies as $index => &$company) {
+            $currentLogo = isset($company['logo']) ? trim((string) $company['logo']) : null;
+
+            if ($request->hasFile("companies_logo_files.{$index}")) {
+                if ($currentLogo && str_starts_with($currentLogo, '/storage/')) {
+                    Storage::disk('public')->delete(str_replace('/storage/', '', $currentLogo));
+                }
+
+                $storedPath = $request->file("companies_logo_files.{$index}")->store('company-logos', 'public');
+                $company['logo'] = Storage::url($storedPath);
+            }
+        }
+        unset($company);
 
         $payload = [
             'holding' => $validated['holding'],
@@ -159,7 +177,7 @@ class AdminController extends Controller
                 'autoplay_ms' => $validated['slider']['autoplay_ms'],
                 'items' => $this->decodeJsonArray($validated['slider']['items_json'], 'slider.items_json', 'slides del slider'),
             ],
-            'companies' => $this->decodeJsonArray($validated['companies_json'], 'companies_json', 'empresas'),
+            'companies' => $companies,
             'sectors' => $this->decodeJsonArray($validated['sectors_json'], 'sectors_json', 'sectores'),
             'statistics' => $this->decodeJsonArray($validated['statistics_json'], 'statistics_json', 'estadísticas'),
             'values' => $this->decodeJsonArray($validated['values_json'], 'values_json', 'valores'),

@@ -113,7 +113,7 @@
             }
         @endphp
 
-        <form action="{{ route('admin.settings.save') }}" method="POST" class="space-y-8">
+        <form action="{{ route('admin.settings.save') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
             @csrf
 
             <div>
@@ -361,7 +361,11 @@
                         <input data-field="website" data-index="${index}" type="text" value="${safe(company.website)}" placeholder="Sitio web (https://... o #)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
                         <input data-field="icon" data-index="${index}" type="text" value="${safe(company.icon)}" placeholder="Ícono" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
                         <input data-field="color" data-index="${index}" type="text" value="${safe(company.color)}" placeholder="Color" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
-                        <input data-field="logo" data-index="${index}" type="text" value="${safe(company.logo)}" placeholder="Logo (https://... o /storage/...)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <div class="w-full">
+                            ${company.logo ? `<div class="mb-2"><img src="${safe(company.logo)}" alt="Logo actual" class="h-12 w-auto object-contain rounded bg-white p-1 border border-gray-200"></div>` : ''}
+                            <input type="hidden" value="${safe(company.logo)}" data-field="logo" data-index="${index}">
+                            <input type="file" name="companies_logo_files[${index}]" accept="image/*" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        </div>
                         <input data-field="status" data-index="${index}" type="text" value="${safe(company.status)}" placeholder="Estado (opcional)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
                     </div>
                 </div>

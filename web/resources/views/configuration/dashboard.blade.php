@@ -691,7 +691,7 @@
                     }
                 @endphp
 
-                <form method="POST" action="{{ route('configuration.companies') }}" class="space-y-6" x-data='{
+                <form method="POST" action="{{ route('configuration.companies') }}" enctype="multipart/form-data" class="space-y-6" x-data='{
                     companies: @json($companiesInitial),
                     addCompany() {
                         const lastId = this.companies.length > 0
@@ -764,8 +764,14 @@
                                         <input type="text" x-model="company.color" :name="`companies_items[${index}][color]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="gradient-primary, blue, ...">
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Logo (URL)</label>
-                                        <input type="text" x-model="company.logo" :name="`companies_items[${index}][logo]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="https://... o /storage/...">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Logo</label>
+                                        <template x-if="company.logo">
+                                            <div class="mb-2">
+                                                <img :src="company.logo" alt="Logo actual" class="h-12 w-auto object-contain rounded bg-white p-1 border border-gray-200">
+                                            </div>
+                                        </template>
+                                        <input type="hidden" :name="`companies_items[${index}][logo]`" :value="company.logo || ''">
+                                        <input type="file" accept="image/*" :name="`companies_items[${index}][logo_file]`" class="w-full text-sm text-gray-700 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estado (opcional)</label>

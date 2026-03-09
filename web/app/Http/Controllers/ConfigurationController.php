@@ -230,10 +230,13 @@ class ConfigurationController extends Controller
             'companies_items.*.icon' => 'required|string|max:100',
             'companies_items.*.color' => 'required|string|max:100',
             'companies_items.*.logo' => 'nullable|string|max:2048',
+            'companies_items.*.logo_file' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
             'companies_items.*.status' => 'nullable|string|max:100',
         ]);
 
-        $companies = array_map(static function (array $company): array {
+        $companies = [];
+
+        foreach ($validated['companies_items'] as $index => $company) {
             $normalized = [
                 'id' => (int) $company['id'],
                 'name' => trim($company['name']),
@@ -243,16 +246,25 @@ class ConfigurationController extends Controller
                 'color' => trim($company['color']),
             ];
 
-            if (!empty($company['logo'])) {
-                $normalized['logo'] = trim($company['logo']);
+            $currentLogo = !empty($company['logo']) ? trim($company['logo']) : null;
+
+            if ($request->hasFile("companies_items.{$index}.logo_file")) {
+                if ($currentLogo && str_starts_with($currentLogo, '/storage/')) {
+                    Storage::disk('public')->delete(str_replace('/storage/', '', $currentLogo));
+                }
+
+                $storedPath = $request->file("companies_items.{$index}.logo_file")->store('company-logos', 'public');
+                $normalized['logo'] = Storage::url($storedPath);
+            } elseif ($currentLogo) {
+                $normalized['logo'] = $currentLogo;
             }
 
             if (!empty($company['status'])) {
                 $normalized['status'] = trim($company['status']);
             }
 
-            return $normalized;
-        }, $validated['companies_items']);
+            $companies[] = $normalized;
+        }
 
         SiteSetting::putValue('companies_config', $companies);
 

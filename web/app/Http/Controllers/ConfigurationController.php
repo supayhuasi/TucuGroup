@@ -222,10 +222,34 @@ class ConfigurationController extends Controller
     public function saveCompanies(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'companies' => 'required|json',
+            'companies_items' => 'required|array|min:1',
+            'companies_items.*.id' => 'required|integer|min:1',
+            'companies_items.*.name' => 'required|string|max:255',
+            'companies_items.*.description' => 'required|string|max:1000',
+            'companies_items.*.website' => 'required|string|max:255',
+            'companies_items.*.icon' => 'required|string|max:100',
+            'companies_items.*.color' => 'required|string|max:100',
+            'companies_items.*.status' => 'nullable|string|max:100',
         ]);
 
-        SiteSetting::putValue('companies_config', json_decode($validated['companies'], true));
+        $companies = array_map(static function (array $company): array {
+            $normalized = [
+                'id' => (int) $company['id'],
+                'name' => trim($company['name']),
+                'description' => trim($company['description']),
+                'website' => trim($company['website']),
+                'icon' => trim($company['icon']),
+                'color' => trim($company['color']),
+            ];
+
+            if (!empty($company['status'])) {
+                $normalized['status'] = trim($company['status']);
+            }
+
+            return $normalized;
+        }, $validated['companies_items']);
+
+        SiteSetting::putValue('companies_config', $companies);
 
         return redirect()->route('configuration.dashboard')
             ->with('success', 'Empresas actualizadas correctamente.');

@@ -17,6 +17,30 @@
     </div>
 
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        @php
+            $companiesFromOld = old('companies_json');
+            $companiesData = $content['companies'] ?? [];
+
+            if (is_string($companiesFromOld) && trim($companiesFromOld) !== '') {
+                $decodedCompanies = json_decode($companiesFromOld, true);
+                if (is_array($decodedCompanies)) {
+                    $companiesData = $decodedCompanies;
+                }
+            }
+
+            if (!is_array($companiesData) || empty($companiesData)) {
+                $companiesData = [[
+                    'id' => 1,
+                    'name' => '',
+                    'description' => '',
+                    'website' => '',
+                    'icon' => '',
+                    'color' => '',
+                    'status' => '',
+                ]];
+            }
+        @endphp
+
         <form action="{{ route('admin.settings.save') }}" method="POST" class="space-y-8">
             @csrf
 
@@ -136,7 +160,16 @@
                 <div class="grid grid-cols-1 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Empresas</label>
-                        <textarea name="companies_json" rows="8" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 font-mono text-sm">{{ old('companies_json', json_encode($content['companies'] ?? [], JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)) }}</textarea>
+                        <div id="companies-editor" class="space-y-4" data-initial='@json($companiesData)'>
+                            <div id="companies-list" class="space-y-4"></div>
+                            <div class="flex justify-between items-center">
+                                <button type="button" id="add-company-btn" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-lg transition">
+                                    + Agregar empresa
+                                </button>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Edición visual activada, sin JSON manual.</p>
+                            </div>
+                            <input type="hidden" id="companies_json_hidden" name="companies_json" value='@json($companiesData, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)'>
+                        </div>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sectores</label>
@@ -164,4 +197,100 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const editor = document.getElementById('companies-editor');
+        const list = document.getElementById('companies-list');
+        const addButton = document.getElementById('add-company-btn');
+        const hiddenInput = document.getElementById('companies_json_hidden');
+
+        if (!editor || !list || !addButton || !hiddenInput) {
+            return;
+        }
+
+        let companies = [];
+
+        try {
+            const initial = JSON.parse(editor.dataset.initial || '[]');
+            companies = Array.isArray(initial) ? initial : [];
+        } catch (error) {
+            companies = [];
+        }
+
+        if (companies.length === 0) {
+            companies = [{ id: 1, name: '', description: '', website: '', icon: '', color: '', status: '' }];
+        }
+
+        const getCardHtml = (company, index) => {
+            const safe = (value) => String(value ?? '').replace(/"/g, '&quot;');
+
+            return `
+                <div class="p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
+                    <div class="flex items-center justify-between mb-3">
+                        <h5 class="font-semibold text-gray-800 dark:text-white">Empresa #${index + 1}</h5>
+                        <button type="button" data-remove="${index}" class="text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Eliminar</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input data-field="id" data-index="${index}" type="number" min="1" value="${safe(company.id)}" placeholder="ID" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <input data-field="name" data-index="${index}" type="text" value="${safe(company.name)}" placeholder="Nombre" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <textarea data-field="description" data-index="${index}" rows="3" placeholder="Descripción" class="md:col-span-2 w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">${safe(company.description)}</textarea>
+                        <input data-field="website" data-index="${index}" type="text" value="${safe(company.website)}" placeholder="Sitio web (https://... o #)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <input data-field="icon" data-index="${index}" type="text" value="${safe(company.icon)}" placeholder="Ícono" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <input data-field="color" data-index="${index}" type="text" value="${safe(company.color)}" placeholder="Color" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <input data-field="status" data-index="${index}" type="text" value="${safe(company.status)}" placeholder="Estado (opcional)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                    </div>
+                </div>
+            `;
+        };
+
+        const syncHidden = () => {
+            hiddenInput.value = JSON.stringify(companies);
+        };
+
+        const render = () => {
+            list.innerHTML = companies.map((company, index) => getCardHtml(company, index)).join('');
+            syncHidden();
+        };
+
+        addButton.addEventListener('click', function () {
+            const maxId = companies.reduce((carry, company) => {
+                const current = Number(company.id) || 0;
+                return current > carry ? current : carry;
+            }, 0);
+
+            companies.push({ id: maxId + 1, name: '', description: '', website: '', icon: '', color: '', status: '' });
+            render();
+        });
+
+        list.addEventListener('click', function (event) {
+            const button = event.target.closest('[data-remove]');
+            if (!button) {
+                return;
+            }
+
+            const index = Number(button.getAttribute('data-remove'));
+            if (companies.length === 1) {
+                return;
+            }
+
+            companies.splice(index, 1);
+            render();
+        });
+
+        list.addEventListener('input', function (event) {
+            const field = event.target.getAttribute('data-field');
+            const index = Number(event.target.getAttribute('data-index'));
+
+            if (!field || Number.isNaN(index) || !companies[index]) {
+                return;
+            }
+
+            companies[index][field] = event.target.value;
+            syncHidden();
+        });
+
+        render();
+    });
+</script>
 @endsection

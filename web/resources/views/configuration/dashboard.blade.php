@@ -675,26 +675,110 @@
 
             {{-- Empresas --}}
             <x-accordion-item id="7" title="🏢 Gestión de Empresas">
-                <form method="POST" action="{{ route('configuration.companies') }}" class="space-y-6">
+                @php
+                    $companiesInitial = old('companies_items', $config['companies']);
+                    if (!is_array($companiesInitial) || empty($companiesInitial)) {
+                        $companiesInitial = [[
+                            'id' => 1,
+                            'name' => '',
+                            'description' => '',
+                            'website' => '',
+                            'icon' => '',
+                            'color' => '',
+                            'status' => '',
+                        ]];
+                    }
+                @endphp
+
+                <form method="POST" action="{{ route('configuration.companies') }}" class="space-y-6" x-data='{
+                    companies: @json($companiesInitial),
+                    addCompany() {
+                        const lastId = this.companies.length > 0
+                            ? Math.max(...this.companies.map(company => Number(company.id) || 0))
+                            : 0;
+
+                        this.companies.push({
+                            id: lastId + 1,
+                            name: "",
+                            description: "",
+                            website: "",
+                            icon: "",
+                            color: "",
+                            status: ""
+                        });
+                    },
+                    removeCompany(index) {
+                        this.companies.splice(index, 1);
+                    }
+                }'>
                     @csrf
 
                     <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
-                        Ingresa la configuración de empresas en formato JSON. Se debe incluir: id, name, description, website, icon, color y status (opcional).
+                        Carga las empresas desde este formulario visual. No necesitas editar JSON.
                     </p>
 
-                    <textarea
-                        name="companies"
-                        rows="12"
-                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
-                        placeholder='[{"id": 1, "name": "Empresa 1", "description": "Descripción", "website": "https://...", "icon": "icon", "color": "gradient-primary"}]'
-                    >{{ old('companies', json_encode($config['companies'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)) }}</textarea>
-
-                    @error('companies')
+                    @error('companies_items')
                         <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
                     @enderror
 
-                    {{-- Botón Guardar --}}
-                    <div class="flex justify-end">
+                    <div class="space-y-4">
+                        <template x-for="(company, index) in companies" :key="index">
+                            <div class="p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h4 class="font-semibold text-gray-800 dark:text-gray-100" x-text="`Empresa #${index + 1}`"></h4>
+                                    <button
+                                        type="button"
+                                        x-show="companies.length > 1"
+                                        @click="removeCompany(index)"
+                                        class="px-3 py-1 text-sm rounded-lg bg-red-600 hover:bg-red-700 text-white"
+                                    >
+                                        Eliminar
+                                    </button>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">ID</label>
+                                        <input type="number" min="1" x-model="company.id" :name="`companies_items[${index}][id]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre</label>
+                                        <input type="text" x-model="company.name" :name="`companies_items[${index}][name]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Descripción</label>
+                                        <textarea rows="3" x-model="company.description" :name="`companies_items[${index}][description]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"></textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sitio web</label>
+                                        <input type="text" x-model="company.website" :name="`companies_items[${index}][website]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="https://... o #">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ícono</label>
+                                        <input type="text" x-model="company.icon" :name="`companies_items[${index}][icon]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="roller, tech, ...">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Color</label>
+                                        <input type="text" x-model="company.color" :name="`companies_items[${index}][color]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="gradient-primary, blue, ...">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estado (opcional)</label>
+                                        <input type="text" x-model="company.status" :name="`companies_items[${index}][status]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="coming_soon">
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <button
+                            type="button"
+                            @click="addCompany()"
+                            class="px-4 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded-lg transition-colors"
+                        >
+                            + Agregar Empresa
+                        </button>
+
                         <button
                             type="submit"
                             class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"

@@ -22,6 +22,10 @@
             $companiesData = $content['companies'] ?? [];
             $sectorsFromOld = old('sectors_json');
             $sectorsData = $content['sectors'] ?? [];
+            $statisticsFromOld = old('statistics_json');
+            $statisticsData = $content['statistics'] ?? [];
+            $valuesFromOld = old('values_json');
+            $valuesData = $content['values'] ?? [];
 
             if (is_string($companiesFromOld) && trim($companiesFromOld) !== '') {
                 $decodedCompanies = json_decode($companiesFromOld, true);
@@ -57,6 +61,36 @@
                     'icon' => '',
                     'color' => '',
                     'features' => [],
+                ]];
+            }
+
+            if (is_string($statisticsFromOld) && trim($statisticsFromOld) !== '') {
+                $decodedStatistics = json_decode($statisticsFromOld, true);
+                if (is_array($decodedStatistics)) {
+                    $statisticsData = $decodedStatistics;
+                }
+            }
+
+            if (!is_array($statisticsData) || empty($statisticsData)) {
+                $statisticsData = [[
+                    'number' => '',
+                    'label' => '',
+                ]];
+            }
+
+            if (is_string($valuesFromOld) && trim($valuesFromOld) !== '') {
+                $decodedValues = json_decode($valuesFromOld, true);
+                if (is_array($decodedValues)) {
+                    $valuesData = $decodedValues;
+                }
+            }
+
+            if (!is_array($valuesData) || empty($valuesData)) {
+                $valuesData = [[
+                    'title' => '',
+                    'description' => '',
+                    'icon' => '',
+                    'color' => '',
                 ]];
             }
         @endphp
@@ -176,7 +210,7 @@
             </div>
 
             <div>
-                <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Contenido editable completo (JSON)</h4>
+                <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Contenido editable completo</h4>
                 <div class="grid grid-cols-1 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Empresas</label>
@@ -206,11 +240,29 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estadísticas</label>
-                        <textarea name="statistics_json" rows="6" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 font-mono text-sm">{{ old('statistics_json', json_encode($content['statistics'] ?? [], JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)) }}</textarea>
+                        <div id="statistics-editor" class="space-y-4" data-initial='@json($statisticsData)'>
+                            <div id="statistics-list" class="space-y-4"></div>
+                            <div class="flex justify-between items-center">
+                                <button type="button" id="add-statistic-btn" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-lg transition">
+                                    + Agregar estadística
+                                </button>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Edición visual activada, sin JSON manual.</p>
+                            </div>
+                            <input type="hidden" id="statistics_json_hidden" name="statistics_json" value='@json($statisticsData, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)'>
+                        </div>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Valores</label>
-                        <textarea name="values_json" rows="6" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 font-mono text-sm">{{ old('values_json', json_encode($content['values'] ?? [], JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)) }}</textarea>
+                        <div id="values-editor" class="space-y-4" data-initial='@json($valuesData)'>
+                            <div id="values-list" class="space-y-4"></div>
+                            <div class="flex justify-between items-center">
+                                <button type="button" id="add-value-btn" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-lg transition">
+                                    + Agregar valor
+                                </button>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Edición visual activada, sin JSON manual.</p>
+                            </div>
+                            <input type="hidden" id="values_json_hidden" name="values_json" value='@json($valuesData, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)'>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -237,6 +289,14 @@
         const sectorsList = document.getElementById('sectors-list');
         const addSectorButton = document.getElementById('add-sector-btn');
         const sectorsHiddenInput = document.getElementById('sectors_json_hidden');
+        const statisticsEditor = document.getElementById('statistics-editor');
+        const statisticsList = document.getElementById('statistics-list');
+        const addStatisticButton = document.getElementById('add-statistic-btn');
+        const statisticsHiddenInput = document.getElementById('statistics_json_hidden');
+        const valuesEditor = document.getElementById('values-editor');
+        const valuesList = document.getElementById('values-list');
+        const addValueButton = document.getElementById('add-value-btn');
+        const valuesHiddenInput = document.getElementById('values_json_hidden');
 
         if (!editor || !list || !addButton || !hiddenInput) {
             return;
@@ -430,6 +490,162 @@
         });
 
         renderSectors();
+
+        if (!statisticsEditor || !statisticsList || !addStatisticButton || !statisticsHiddenInput) {
+            return;
+        }
+
+        let statistics = [];
+
+        try {
+            const initialStatistics = JSON.parse(statisticsEditor.dataset.initial || '[]');
+            statistics = Array.isArray(initialStatistics) ? initialStatistics : [];
+        } catch (error) {
+            statistics = [];
+        }
+
+        if (statistics.length === 0) {
+            statistics = [{ number: '', label: '' }];
+        }
+
+        const getStatisticCardHtml = (stat, index) => {
+            const safe = (value) => String(value ?? '').replace(/"/g, '&quot;');
+
+            return `
+                <div class="p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
+                    <div class="flex items-center justify-between mb-3">
+                        <h5 class="font-semibold text-gray-800 dark:text-white">Estadística #${index + 1}</h5>
+                        <button type="button" data-stat-remove="${index}" class="text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Eliminar</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input data-stat-field="number" data-stat-index="${index}" type="text" value="${safe(stat.number)}" placeholder="Número (ej: 25+)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <input data-stat-field="label" data-stat-index="${index}" type="text" value="${safe(stat.label)}" placeholder="Etiqueta" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                    </div>
+                </div>
+            `;
+        };
+
+        const syncStatisticsHidden = () => {
+            statisticsHiddenInput.value = JSON.stringify(statistics);
+        };
+
+        const renderStatistics = () => {
+            statisticsList.innerHTML = statistics.map((stat, index) => getStatisticCardHtml(stat, index)).join('');
+            syncStatisticsHidden();
+        };
+
+        addStatisticButton.addEventListener('click', function () {
+            statistics.push({ number: '', label: '' });
+            renderStatistics();
+        });
+
+        statisticsList.addEventListener('click', function (event) {
+            const button = event.target.closest('[data-stat-remove]');
+            if (!button) {
+                return;
+            }
+
+            const index = Number(button.getAttribute('data-stat-remove'));
+            if (statistics.length === 1) {
+                return;
+            }
+
+            statistics.splice(index, 1);
+            renderStatistics();
+        });
+
+        statisticsList.addEventListener('input', function (event) {
+            const field = event.target.getAttribute('data-stat-field');
+            const index = Number(event.target.getAttribute('data-stat-index'));
+
+            if (!field || Number.isNaN(index) || !statistics[index]) {
+                return;
+            }
+
+            statistics[index][field] = event.target.value;
+            syncStatisticsHidden();
+        });
+
+        renderStatistics();
+
+        if (!valuesEditor || !valuesList || !addValueButton || !valuesHiddenInput) {
+            return;
+        }
+
+        let values = [];
+
+        try {
+            const initialValues = JSON.parse(valuesEditor.dataset.initial || '[]');
+            values = Array.isArray(initialValues) ? initialValues : [];
+        } catch (error) {
+            values = [];
+        }
+
+        if (values.length === 0) {
+            values = [{ title: '', description: '', icon: '', color: '' }];
+        }
+
+        const getValueCardHtml = (value, index) => {
+            const safe = (content) => String(content ?? '').replace(/"/g, '&quot;');
+
+            return `
+                <div class="p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
+                    <div class="flex items-center justify-between mb-3">
+                        <h5 class="font-semibold text-gray-800 dark:text-white">Valor #${index + 1}</h5>
+                        <button type="button" data-value-remove="${index}" class="text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Eliminar</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input data-value-field="title" data-value-index="${index}" type="text" value="${safe(value.title)}" placeholder="Título" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <input data-value-field="icon" data-value-index="${index}" type="text" value="${safe(value.icon)}" placeholder="Ícono" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <input data-value-field="color" data-value-index="${index}" type="text" value="${safe(value.color)}" placeholder="Color" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <textarea data-value-field="description" data-value-index="${index}" rows="3" placeholder="Descripción" class="md:col-span-2 w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">${safe(value.description)}</textarea>
+                    </div>
+                </div>
+            `;
+        };
+
+        const syncValuesHidden = () => {
+            valuesHiddenInput.value = JSON.stringify(values);
+        };
+
+        const renderValues = () => {
+            valuesList.innerHTML = values.map((value, index) => getValueCardHtml(value, index)).join('');
+            syncValuesHidden();
+        };
+
+        addValueButton.addEventListener('click', function () {
+            values.push({ title: '', description: '', icon: '', color: '' });
+            renderValues();
+        });
+
+        valuesList.addEventListener('click', function (event) {
+            const button = event.target.closest('[data-value-remove]');
+            if (!button) {
+                return;
+            }
+
+            const index = Number(button.getAttribute('data-value-remove'));
+            if (values.length === 1) {
+                return;
+            }
+
+            values.splice(index, 1);
+            renderValues();
+        });
+
+        valuesList.addEventListener('input', function (event) {
+            const field = event.target.getAttribute('data-value-field');
+            const index = Number(event.target.getAttribute('data-value-index'));
+
+            if (!field || Number.isNaN(index) || !values[index]) {
+                return;
+            }
+
+            values[index][field] = event.target.value;
+            syncValuesHidden();
+        });
+
+        renderValues();
     });
 </script>
 @endsection

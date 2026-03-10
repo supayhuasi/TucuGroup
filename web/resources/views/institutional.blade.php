@@ -142,18 +142,14 @@
                 <div class="hidden md:block"></div>
                 <a href="#inicio" class="flex items-center justify-center gap-3 md:justify-self-center">
                     @if($siteLogoUrl)
-                        <div class="logo-shell flex h-12 w-36 items-center justify-center rounded-xl bg-white px-3 ring-1 ring-[#14532d]/10 overflow-hidden">
-                            <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-8 w-auto max-w-full object-contain">
+                        <div class="logo-shell shrink-0 flex h-14 w-48 items-center justify-center rounded-xl bg-white px-3 ring-1 ring-[#14532d]/10 overflow-hidden">
+                            <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-11 w-auto max-w-full object-contain">
                         </div>
                     @else
-                        <div class="logo-shell flex h-12 w-24 items-center justify-center rounded-xl gradient-primary text-white text-base font-bold">
+                        <div class="logo-shell shrink-0 flex h-14 w-32 items-center justify-center rounded-xl gradient-primary text-white text-base font-bold">
                             TG
                         </div>
                     @endif
-                    <div class="text-left md:text-center">
-                        <span class="block font-bold text-lg leading-tight">{{ $holding['name'] ?? 'Tucu Group' }}</span>
-                        <span class="hidden sm:block text-xs text-gray-500 dark:text-gray-400">{{ $holding['tagline'] ?? 'Holding Empresarial Innovador' }}</span>
-                    </div>
                 </a>
                 <div class="hidden md:flex items-center gap-8 md:justify-self-end">
                     <a href="#inicio" class="text-sm hover:text-[#14532d] transition">Inicio</a>
@@ -211,8 +207,7 @@
                     </div>
                 @endif
                 <h1 class="text-5xl sm:text-6xl font-bold mb-6 leading-tight">
-                    {{ $hero['title_line_1'] ?? '' }}<br>
-                    <span class="gradient-primary bg-clip-text text-transparent">{{ $hero['title_highlight'] ?? '' }}</span>
+                    {{ $hero['title_line_1'] ?? '' }}
                 </h1>
                 <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8">
                     {{ $hero['description'] ?? '' }}

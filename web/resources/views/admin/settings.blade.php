@@ -24,6 +24,8 @@
             $sectorsData = $content['sectors'] ?? [];
             $statisticsFromOld = old('statistics_json');
             $statisticsData = $content['statistics'] ?? [];
+            $footerStatisticsFromOld = old('footer_stats_json');
+            $footerStatisticsData = $content['footer_statistics'] ?? ($content['statistics'] ?? []);
             $valuesFromOld = old('values_json');
             $valuesData = $content['values'] ?? [];
             $sliderItemsFromOld = old('slider.items_json');
@@ -76,6 +78,20 @@
 
             if (!is_array($statisticsData) || empty($statisticsData)) {
                 $statisticsData = [[
+                    'number' => '',
+                    'label' => '',
+                ]];
+            }
+
+            if (is_string($footerStatisticsFromOld) && trim($footerStatisticsFromOld) !== '') {
+                $decodedFooterStatistics = json_decode($footerStatisticsFromOld, true);
+                if (is_array($decodedFooterStatistics)) {
+                    $footerStatisticsData = $decodedFooterStatistics;
+                }
+            }
+
+            if (!is_array($footerStatisticsData) || empty($footerStatisticsData)) {
+                $footerStatisticsData = [[
                     'number' => '',
                     'label' => '',
                 ]];
@@ -278,6 +294,19 @@
                         </div>
                     </div>
                     <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estadísticas del footer</label>
+                        <div id="footer-statistics-editor" class="space-y-4" data-initial='@json($footerStatisticsData)'>
+                            <div id="footer-statistics-list" class="space-y-4"></div>
+                            <div class="flex justify-between items-center">
+                                <button type="button" id="add-footer-statistic-btn" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-lg transition">
+                                    + Agregar estadística footer
+                                </button>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Bloque para "Cantidad de clientes" y métricas del pie.</p>
+                            </div>
+                            <input type="hidden" id="footer_stats_json_hidden" name="footer_stats_json" value='@json($footerStatisticsData, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)'>
+                        </div>
+                    </div>
+                    <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Valores</label>
                         <div id="values-editor" class="space-y-4" data-initial='@json($valuesData)'>
                             <div id="values-list" class="space-y-4"></div>
@@ -319,6 +348,10 @@
         const statisticsList = document.getElementById('statistics-list');
         const addStatisticButton = document.getElementById('add-statistic-btn');
         const statisticsHiddenInput = document.getElementById('statistics_json_hidden');
+        const footerStatisticsEditor = document.getElementById('footer-statistics-editor');
+        const footerStatisticsList = document.getElementById('footer-statistics-list');
+        const addFooterStatisticButton = document.getElementById('add-footer-statistic-btn');
+        const footerStatisticsHiddenInput = document.getElementById('footer_stats_json_hidden');
         const valuesEditor = document.getElementById('values-editor');
         const valuesList = document.getElementById('values-list');
         const addValueButton = document.getElementById('add-value-btn');
@@ -680,6 +713,83 @@
         });
 
         renderStatistics();
+
+        if (!footerStatisticsEditor || !footerStatisticsList || !addFooterStatisticButton || !footerStatisticsHiddenInput) {
+            return;
+        }
+
+        let footerStatistics = [];
+
+        try {
+            const initialFooterStatistics = JSON.parse(footerStatisticsEditor.dataset.initial || '[]');
+            footerStatistics = Array.isArray(initialFooterStatistics) ? initialFooterStatistics : [];
+        } catch (error) {
+            footerStatistics = [];
+        }
+
+        if (footerStatistics.length === 0) {
+            footerStatistics = [{ number: '', label: '' }];
+        }
+
+        const getFooterStatisticCardHtml = (stat, index) => {
+            const safe = (value) => String(value ?? '').replace(/"/g, '&quot;');
+
+            return `
+                <div class="p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
+                    <div class="flex items-center justify-between mb-3">
+                        <h5 class="font-semibold text-gray-800 dark:text-white">Footer estadística #${index + 1}</h5>
+                        <button type="button" data-footer-stat-remove="${index}" class="text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Eliminar</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input data-footer-stat-field="number" data-footer-stat-index="${index}" type="text" value="${safe(stat.number)}" placeholder="Número (ej: 500+)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                        <input data-footer-stat-field="label" data-footer-stat-index="${index}" type="text" value="${safe(stat.label)}" placeholder="Etiqueta (ej: Clientes)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                    </div>
+                </div>
+            `;
+        };
+
+        const syncFooterStatisticsHidden = () => {
+            footerStatisticsHiddenInput.value = JSON.stringify(footerStatistics);
+        };
+
+        const renderFooterStatistics = () => {
+            footerStatisticsList.innerHTML = footerStatistics.map((stat, index) => getFooterStatisticCardHtml(stat, index)).join('');
+            syncFooterStatisticsHidden();
+        };
+
+        addFooterStatisticButton.addEventListener('click', function () {
+            footerStatistics.push({ number: '', label: '' });
+            renderFooterStatistics();
+        });
+
+        footerStatisticsList.addEventListener('click', function (event) {
+            const button = event.target.closest('[data-footer-stat-remove]');
+            if (!button) {
+                return;
+            }
+
+            const index = Number(button.getAttribute('data-footer-stat-remove'));
+            if (footerStatistics.length === 1) {
+                return;
+            }
+
+            footerStatistics.splice(index, 1);
+            renderFooterStatistics();
+        });
+
+        footerStatisticsList.addEventListener('input', function (event) {
+            const field = event.target.getAttribute('data-footer-stat-field');
+            const index = Number(event.target.getAttribute('data-footer-stat-index'));
+
+            if (!field || Number.isNaN(index) || !footerStatistics[index]) {
+                return;
+            }
+
+            footerStatistics[index][field] = event.target.value;
+            syncFooterStatisticsHidden();
+        });
+
+        renderFooterStatistics();
 
         if (!valuesEditor || !valuesList || !addValueButton || !valuesHiddenInput) {
             return;

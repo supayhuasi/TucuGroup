@@ -86,7 +86,7 @@ return [
             'title' => 'Sector Industrial',
             'subtitle' => 'Componentes de precisión y soluciones manufactureras',
             'icon' => 'factory',
-            'color' => 'orange',
+            'color' => 'green',
             'features' => [
                 'Rodillos y rodamientos de precisión',
                 'Componentes para maquinaria pesada',
@@ -151,6 +151,26 @@ return [
         ],
     ],
 
+    // Estadísticas destacadas del footer
+    'footer_statistics' => [
+        [
+            'number' => '500+',
+            'label' => 'Clientes',
+        ],
+        [
+            'number' => '120+',
+            'label' => 'Proyectos',
+        ],
+        [
+            'number' => '25+',
+            'label' => 'Años',
+        ],
+        [
+            'number' => '30+',
+            'label' => 'Países',
+        ],
+    ],
+
     // Valores corporativos
     'values' => [
         [
@@ -197,8 +217,8 @@ return [
 
     // Colores del tema
     'colors' => [
-        'primary' => '#F53003',
-        'primary_light' => '#FF6B35',
+        'primary' => '#14532d',
+        'primary_light' => '#1f7a45',
         'secondary' => '#1a1a1a',
         'text_light' => '#1b1b18',
         'text_dark' => '#EDEDEC',

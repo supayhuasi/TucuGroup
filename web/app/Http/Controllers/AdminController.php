@@ -143,6 +143,7 @@ class AdminController extends Controller
             'companies_logo_files.*' => 'nullable|image|mimes:jpeg,png,gif,webp|max:5120',
             'sectors_json' => 'required|string',
             'statistics_json' => 'required|string',
+            'footer_stats_json' => 'required|string',
             'values_json' => 'required|string',
         ], [
             'integrations.google_analytics_id.regex' => 'El ID de Google Analytics debe tener formato G-XXXXXXXXXX.',
@@ -180,6 +181,7 @@ class AdminController extends Controller
             'companies' => $companies,
             'sectors' => $this->decodeJsonArray($validated['sectors_json'], 'sectors_json', 'sectores'),
             'statistics' => $this->decodeJsonArray($validated['statistics_json'], 'statistics_json', 'estadísticas'),
+            'footer_statistics' => $this->decodeJsonArray($validated['footer_stats_json'], 'footer_stats_json', 'estadísticas del footer'),
             'values' => $this->decodeJsonArray($validated['values_json'], 'values_json', 'valores'),
         ];
 

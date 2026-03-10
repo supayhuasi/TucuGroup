@@ -12,7 +12,7 @@
     <div class="space-y-4">
         @foreach ($features as $feature)
             <div class="flex items-center gap-3">
-                <div class="w-2 h-2 bg-[#F53003] rounded-full"></div>
+                <div class="w-2 h-2 bg-[#14532d] rounded-full"></div>
                 <span>{{ $feature }}</span>
             </div>
         @endforeach

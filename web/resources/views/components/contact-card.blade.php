@@ -1,6 +1,6 @@
 <!-- Componente: Tarjeta de Contacto -->
 <div class="bg-white dark:bg-[#1a1a1a] rounded-xl p-8 text-center border border-gray-200 dark:border-gray-700">
-    <div class="w-12 h-12 rounded-full bg-[#F53003]/10 flex items-center justify-center text-[#F53003] mx-auto mb-4">
+    <div class="w-12 h-12 rounded-full bg-[#14532d]/10 flex items-center justify-center text-[#14532d] mx-auto mb-4">
         {!! $icon !!}
     </div>
     <h3 class="font-bold mb-2">{{ $title }}</h3>

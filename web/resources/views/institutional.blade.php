@@ -9,6 +9,7 @@
     $companies = $content['companies'] ?? [];
     $sectors = $content['sectors'] ?? [];
     $statistics = $content['statistics'] ?? [];
+    $footerStatistics = $content['footer_statistics'] ?? $statistics;
     $values = $content['values'] ?? [];
     $contact = $content['contact'] ?? [];
     $gaId = $content['integrations']['google_analytics_id'] ?? null;
@@ -26,7 +27,7 @@
     
     <style>
         .gradient-primary {
-            background: linear-gradient(135deg, #F53003 0%, #FF6B35 100%);
+            background: linear-gradient(135deg, #14532d 0%, #1f7a45 100%);
         }
         
         .gradient-dark {
@@ -39,7 +40,7 @@
         
         .card-hover:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(245, 48, 3, 0.15);
+            box-shadow: 0 20px 40px rgba(20, 83, 45, 0.18);
         }
         
         .sector-card {
@@ -54,7 +55,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(245, 48, 3, 0.1) 0%, rgba(255, 107, 53, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(20, 83, 45, 0.12) 0%, rgba(31, 122, 69, 0.06) 100%);
             opacity: 0;
             transition: opacity 0.3s ease;
         }
@@ -76,7 +77,7 @@
         .stats-counter {
             font-size: 3rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #F53003, #FF6B35);
+            background: linear-gradient(135deg, #14532d, #1f7a45);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -87,7 +88,7 @@
         }
         
         .dark .navbar-scroll {
-            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.1);
+            box-shadow: 0 4px 12px rgba(31, 122, 69, 0.16);
         }
     </style>
 </head>
@@ -114,9 +115,9 @@
                     <span class="font-bold text-lg hidden sm:inline">{{ $holding['name'] ?? 'Tucu Group' }}</span>
                 </a>
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="#empresas" class="text-sm hover:text-[#F53003] transition">Empresas</a>
-                    <a href="#sectores" class="text-sm hover:text-[#F53003] transition">Sectores</a>
-                    <a href="#valores" class="text-sm hover:text-[#F53003] transition">Valores</a>
+                    <a href="#empresas" class="text-sm hover:text-[#14532d] transition">Empresas</a>
+                    <a href="#sectores" class="text-sm hover:text-[#14532d] transition">Sectores</a>
+                    <a href="#valores" class="text-sm hover:text-[#14532d] transition">Valores</a>
                     <a href="#contacto" class="text-sm px-6 py-2 bg-gradient-primary text-white rounded-lg hover:shadow-lg transition">Contacto</a>
                 </div>
                 
@@ -130,9 +131,9 @@
             
             <!-- Mobile Menu -->
             <div id="mobile-menu" class="hidden md:hidden pb-4 space-y-2">
-                <a href="#empresas" class="block px-4 py-2 hover:text-[#F53003] transition">Empresas</a>
-                <a href="#sectores" class="block px-4 py-2 hover:text-[#F53003] transition">Sectores</a>
-                <a href="#valores" class="block px-4 py-2 hover:text-[#F53003] transition">Valores</a>
+                <a href="#empresas" class="block px-4 py-2 hover:text-[#14532d] transition">Empresas</a>
+                <a href="#sectores" class="block px-4 py-2 hover:text-[#14532d] transition">Sectores</a>
+                <a href="#valores" class="block px-4 py-2 hover:text-[#14532d] transition">Valores</a>
                 <a href="#contacto" class="block px-4 py-2 bg-gradient-primary text-white rounded-lg">Contacto</a>
             </div>
         </div>
@@ -160,7 +161,7 @@
     <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50 dark:from-[#161615] dark:to-[#0a0a0a]">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-12">
-                <div class="inline-block mb-4 px-4 py-2 bg-[#fff2f2] dark:bg-[#3E3E3A] rounded-full text-sm font-medium text-[#F53003] dark:text-[#FF4433]">
+                <div class="inline-block mb-4 px-4 py-2 bg-[#ecfdf3] dark:bg-[#3E3E3A] rounded-full text-sm font-medium text-[#14532d] dark:text-[#4ade80]">
                     {{ $hero['badge'] ?? '' }}
                 </div>
                 <h1 class="text-5xl sm:text-6xl font-bold mb-6 leading-tight">
@@ -198,7 +199,7 @@
                         <h3 class="text-2xl font-bold mb-3">{{ $company['name'] ?? '' }}</h3>
                         <p class="text-gray-600 dark:text-gray-400 mb-4">{{ $company['description'] ?? '' }}</p>
                         @if(!empty($company['website']) && $company['website'] !== '#')
-                            <a href="{{ $company['website'] }}" target="_blank" class="text-[#F53003] font-semibold hover:underline">{{ $company['website'] }}</a>
+                            <a href="{{ $company['website'] }}" target="_blank" class="text-[#14532d] font-semibold hover:underline">{{ $company['website'] }}</a>
                         @endif
                     </div>
                 @endforeach
@@ -217,7 +218,7 @@
             <div class="grid md:grid-cols-2 gap-8 mb-12">
                 @foreach($sectors as $sector)
                     <div class="bg-white dark:bg-[#1a1a1a] rounded-2xl p-8 border border-gray-200 dark:border-gray-700 sector-card">
-                        <div class="icon-box bg-orange-100 dark:bg-orange-900 text-orange-600">⚙️</div>
+                        <div class="icon-box bg-green-100 dark:bg-green-900 text-green-700">⚙️</div>
                         <h3 class="text-2xl font-bold mb-2">{{ $sector['title'] ?? '' }}</h3>
                         <p class="text-gray-600 dark:text-gray-400 mb-4">{{ $sector['subtitle'] ?? '' }}</p>
                         <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-300">
@@ -299,11 +300,11 @@
             <div class="bg-white dark:bg-[#1a1a1a] rounded-2xl p-8 border border-gray-200 dark:border-gray-700 max-w-2xl mx-auto">
                 <form class="space-y-6">
                     <div class="grid md:grid-cols-2 gap-6">
-                        <input type="text" placeholder="Nombre completo" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#0a0a0a] focus:outline-none focus:ring-2 focus:ring-[#F53003] dark:text-white">
-                        <input type="email" placeholder="Email" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#0a0a0a] focus:outline-none focus:ring-2 focus:ring-[#F53003] dark:text-white">
+                        <input type="text" placeholder="Nombre completo" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#0a0a0a] focus:outline-none focus:ring-2 focus:ring-[#14532d] dark:text-white">
+                        <input type="email" placeholder="Email" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#0a0a0a] focus:outline-none focus:ring-2 focus:ring-[#14532d] dark:text-white">
                     </div>
-                    <input type="text" placeholder="Asunto" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#0a0a0a] focus:outline-none focus:ring-2 focus:ring-[#F53003] dark:text-white">
-                    <textarea placeholder="Mensaje" rows="5" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#0a0a0a] focus:outline-none focus:ring-2 focus:ring-[#F53003] dark:text-white"></textarea>
+                    <input type="text" placeholder="Asunto" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#0a0a0a] focus:outline-none focus:ring-2 focus:ring-[#14532d] dark:text-white">
+                    <textarea placeholder="Mensaje" rows="5" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#0a0a0a] focus:outline-none focus:ring-2 focus:ring-[#14532d] dark:text-white"></textarea>
                     <button type="submit" class="w-full px-8 py-4 bg-gradient-primary text-white rounded-lg font-semibold hover:shadow-xl transition transform hover:scale-105">
                         Enviar Mensaje
                     </button>
@@ -315,6 +316,17 @@
     <!-- Footer -->
     <footer class="bg-[#1a1a1a] dark:bg-[#0a0a0a] text-white py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
+            @if(!empty($footerStatistics))
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10 pb-8 border-b border-gray-700/70">
+                    @foreach($footerStatistics as $stat)
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-[#4ade80]">{{ $stat['number'] ?? '' }}</div>
+                            <p class="text-gray-400 text-sm mt-1">{{ $stat['label'] ?? '' }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+
             <div class="grid md:grid-cols-4 gap-8 mb-8">
                 <div>
                     <div class="text-2xl font-bold mb-4">{{ $holding['name'] ?? 'Tucu Group' }}</div>
@@ -323,25 +335,25 @@
                 <div>
                     <h4 class="font-bold mb-4 text-sm">Empresa</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="#" class="hover:text-[#F53003] transition">Sobre nosotros</a></li>
-                        <li><a href="#" class="hover:text-[#F53003] transition">Carreras</a></li>
-                        <li><a href="#" class="hover:text-[#F53003] transition">Blog</a></li>
+                        <li><a href="#" class="hover:text-[#4ade80] transition">Sobre nosotros</a></li>
+                        <li><a href="#" class="hover:text-[#4ade80] transition">Carreras</a></li>
+                        <li><a href="#" class="hover:text-[#4ade80] transition">Blog</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-bold mb-4 text-sm">Productos</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="https://tucuroller.com.ar" target="_blank" class="hover:text-[#F53003] transition">Tucu Roller</a></li>
-                        <li><a href="#" class="hover:text-[#F53003] transition">Soluciones Tech</a></li>
-                        <li><a href="#" class="hover:text-[#F53003] transition">Iniciativas Sostenibles</a></li>
+                        <li><a href="https://tucuroller.com.ar" target="_blank" class="hover:text-[#4ade80] transition">Tucu Roller</a></li>
+                        <li><a href="#" class="hover:text-[#4ade80] transition">Soluciones Tech</a></li>
+                        <li><a href="#" class="hover:text-[#4ade80] transition">Iniciativas Sostenibles</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-bold mb-4 text-sm">Legal</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="#" class="hover:text-[#F53003] transition">Privacidad</a></li>
-                        <li><a href="#" class="hover:text-[#F53003] transition">Términos</a></li>
-                        <li><a href="#" class="hover:text-[#F53003] transition">Cookies</a></li>
+                        <li><a href="#" class="hover:text-[#4ade80] transition">Privacidad</a></li>
+                        <li><a href="#" class="hover:text-[#4ade80] transition">Términos</a></li>
+                        <li><a href="#" class="hover:text-[#4ade80] transition">Cookies</a></li>
                     </ul>
                 </div>
             </div>

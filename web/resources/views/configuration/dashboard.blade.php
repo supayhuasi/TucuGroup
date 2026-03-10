@@ -66,6 +66,116 @@
                         @enderror
                     </div>
 
+                    {{-- Hero principal (editable) --}}
+                    <div class="border-t border-gray-200 dark:border-gray-700 pt-6 space-y-6">
+                        <h4 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Contenido principal de portada</h4>
+
+                        <div>
+                            <label for="hero_badge" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Etiqueta superior (badge)
+                            </label>
+                            <input
+                                type="text"
+                                id="hero_badge"
+                                name="hero_badge"
+                                value="{{ old('hero_badge', $config['hero_badge']) }}"
+                                placeholder="Holding Empresarial Innovador"
+                                class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                            @error('hero_badge')
+                                <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="hero_title_line_1" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Título línea 1
+                                </label>
+                                <input
+                                    type="text"
+                                    id="hero_title_line_1"
+                                    name="hero_title_line_1"
+                                    value="{{ old('hero_title_line_1', $config['hero_title_line_1']) }}"
+                                    required
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                                @error('hero_title_line_1')
+                                    <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="hero_title_highlight" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Título resaltado
+                                </label>
+                                <input
+                                    type="text"
+                                    id="hero_title_highlight"
+                                    name="hero_title_highlight"
+                                    value="{{ old('hero_title_highlight', $config['hero_title_highlight']) }}"
+                                    required
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                                @error('hero_title_highlight')
+                                    <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="hero_description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Descripción principal
+                            </label>
+                            <textarea
+                                id="hero_description"
+                                name="hero_description"
+                                rows="4"
+                                required
+                                class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >{{ old('hero_description', $config['hero_description']) }}</textarea>
+                            @error('hero_description')
+                                <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="hero_cta_text" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Texto del botón
+                                </label>
+                                <input
+                                    type="text"
+                                    id="hero_cta_text"
+                                    name="hero_cta_text"
+                                    value="{{ old('hero_cta_text', $config['hero_cta_text']) }}"
+                                    required
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                                @error('hero_cta_text')
+                                    <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="hero_cta_link" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Enlace del botón
+                                </label>
+                                <input
+                                    type="text"
+                                    id="hero_cta_link"
+                                    name="hero_cta_link"
+                                    value="{{ old('hero_cta_link', $config['hero_cta_link']) }}"
+                                    placeholder="#empresas"
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                                @error('hero_cta_link')
+                                    <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
                     {{-- Teléfono --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -406,6 +516,9 @@
                                 <label for="logo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                     Seleccionar Logo (JPG, PNG, GIF, WebP - máx. 5MB)
                                 </label>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                                    Tamaño recomendado para menú horizontal: 420x120 px (ideal) o 360x100 px (mínimo), con fondo transparente.
+                                </p>
                                 <input
                                     type="file"
                                     id="logo"

@@ -138,23 +138,24 @@
     <!-- Navigation -->
     <nav class="fixed top-0 w-full bg-white/80 dark:bg-[#161615]/80 backdrop-blur-md z-50 border-b border-gray-200 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <a href="#inicio" class="flex items-center gap-3">
+            <div class="relative flex items-center justify-between h-20 md:grid md:grid-cols-[1fr_auto_1fr] md:gap-6">
+                <div class="hidden md:block"></div>
+                <a href="#inicio" class="flex items-center justify-center gap-3 md:justify-self-center">
                     @if($siteLogoUrl)
-                        <div class="logo-shell flex h-12 w-12 items-center justify-center rounded-2xl bg-white ring-1 ring-[#14532d]/10">
-                            <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-9 w-auto object-contain">
+                        <div class="logo-shell flex h-12 w-36 items-center justify-center rounded-xl bg-white px-3 ring-1 ring-[#14532d]/10 overflow-hidden">
+                            <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-8 w-auto max-w-full object-contain">
                         </div>
                     @else
-                        <div class="logo-shell flex h-12 w-12 items-center justify-center rounded-2xl gradient-primary text-white text-lg font-bold">
+                        <div class="logo-shell flex h-12 w-24 items-center justify-center rounded-xl gradient-primary text-white text-base font-bold">
                             TG
                         </div>
                     @endif
-                    <div>
+                    <div class="text-left md:text-center">
                         <span class="block font-bold text-lg leading-tight">{{ $holding['name'] ?? 'Tucu Group' }}</span>
                         <span class="hidden sm:block text-xs text-gray-500 dark:text-gray-400">{{ $holding['tagline'] ?? 'Holding Empresarial Innovador' }}</span>
                     </div>
                 </a>
-                <div class="hidden md:flex items-center gap-8">
+                <div class="hidden md:flex items-center gap-8 md:justify-self-end">
                     <a href="#inicio" class="text-sm hover:text-[#14532d] transition">Inicio</a>
                     <a href="#empresas" class="text-sm hover:text-[#14532d] transition">Empresas</a>
                     <a href="#sectores" class="text-sm hover:text-[#14532d] transition">Sectores</a>
@@ -203,9 +204,12 @@
     <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50 dark:from-[#161615] dark:to-[#0a0a0a]">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-12">
-                <div class="inline-block mb-4 px-4 py-2 bg-[#ecfdf3] dark:bg-[#3E3E3A] rounded-full text-sm font-medium text-[#14532d] dark:text-[#4ade80]">
-                    {{ $hero['badge'] ?? '' }}
-                </div>
+                @if(!empty($hero['badge']))
+                    <div class="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full border border-[#14532d]/20 bg-[#ecfdf3] dark:bg-[#1f2a22] text-sm font-medium text-[#14532d] dark:text-[#86efac]">
+                        <span class="inline-block h-2 w-2 rounded-full bg-[#22c55e]"></span>
+                        <span>{{ $hero['badge'] }}</span>
+                    </div>
+                @endif
                 <h1 class="text-5xl sm:text-6xl font-bold mb-6 leading-tight">
                     {{ $hero['title_line_1'] ?? '' }}<br>
                     <span class="gradient-primary bg-clip-text text-transparent">{{ $hero['title_highlight'] ?? '' }}</span>

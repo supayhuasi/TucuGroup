@@ -27,12 +27,20 @@ class ConfigurationController extends Controller
         $validated = $request->validate([
             'company_name' => 'required|string|max:255',
             'company_description' => 'required|string|max:1000',
+            'hero_badge' => 'nullable|string|max:120',
+            'hero_title_line_1' => 'required|string|max:255',
+            'hero_title_highlight' => 'required|string|max:255',
+            'hero_description' => 'required|string|max:1000',
+            'hero_cta_text' => 'required|string|max:120',
+            'hero_cta_link' => 'nullable|string|max:255',
             'company_phone' => 'required|string|max:20',
             'company_email' => 'required|email|max:255',
             'company_address' => 'required|string|max:500',
             'company_country' => 'required|string|max:100',
             'company_website' => 'nullable|url|max:255',
         ]);
+
+        $validated['hero_cta_link'] = !empty($validated['hero_cta_link']) ? trim($validated['hero_cta_link']) : '#empresas';
 
         foreach ($validated as $key => $value) {
             SiteSetting::putValue($key, $value);
@@ -402,6 +410,12 @@ class ConfigurationController extends Controller
             // Empresa
             'company_name' => SiteSetting::getValue('company_name', 'Tucu Group'),
             'company_description' => SiteSetting::getValue('company_description', 'Descripción de la empresa'),
+            'hero_badge' => SiteSetting::getValue('hero_badge', config('institutional.hero.badge', '')),
+            'hero_title_line_1' => SiteSetting::getValue('hero_title_line_1', config('institutional.hero.title_line_1', '')),
+            'hero_title_highlight' => SiteSetting::getValue('hero_title_highlight', config('institutional.hero.title_highlight', '')),
+            'hero_description' => SiteSetting::getValue('hero_description', config('institutional.hero.description', '')),
+            'hero_cta_text' => SiteSetting::getValue('hero_cta_text', config('institutional.hero.cta_text', 'Explorar Empresas')),
+            'hero_cta_link' => SiteSetting::getValue('hero_cta_link', config('institutional.hero.cta_link', '#empresas')),
             'company_phone' => SiteSetting::getValue('company_phone', ''),
             'company_email' => SiteSetting::getValue('company_email', ''),
             'company_address' => SiteSetting::getValue('company_address', ''),

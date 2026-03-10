@@ -12,7 +12,10 @@
     $footerStatistics = $content['footer_statistics'] ?? $statistics;
     $values = $content['values'] ?? [];
     $contact = $content['contact'] ?? [];
+    $social = $content['social'] ?? [];
     $gaId = $content['integrations']['google_analytics_id'] ?? null;
+    $siteLogoPath = \App\Models\SiteSetting::getValue('site_logo');
+    $siteLogoUrl = $siteLogoPath ? \Illuminate\Support\Facades\Storage::url($siteLogoPath) : null;
 @endphp
 <head>
     <meta charset="utf-8">
@@ -90,9 +93,37 @@
         .dark .navbar-scroll {
             box-shadow: 0 4px 12px rgba(31, 122, 69, 0.16);
         }
+
+        .footer-panel {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: linear-gradient(145deg, rgba(21, 34, 24, 0.96), rgba(10, 15, 11, 0.96));
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.24);
+        }
+
+        .footer-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top right, rgba(74, 222, 128, 0.18), transparent 42%);
+            pointer-events: none;
+        }
+
+        .footer-link {
+            transition: all 0.25s ease;
+        }
+
+        .footer-link:hover {
+            transform: translateX(6px);
+        }
+
+        .logo-shell {
+            box-shadow: 0 12px 35px rgba(20, 83, 45, 0.24);
+        }
     </style>
 </head>
-<body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] dark:text-[#EDEDEC]">
+<body id="inicio" class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] dark:text-[#EDEDEC]">
     @if(!empty($gaId))
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
@@ -107,14 +138,24 @@
     <!-- Navigation -->
     <nav class="fixed top-0 w-full bg-white/80 dark:bg-[#161615]/80 backdrop-blur-md z-50 border-b border-gray-200 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="#" class="flex items-center gap-2">
-                    <div class="text-2xl font-bold gradient-primary bg-clip-text text-transparent">
-                        TG
+            <div class="flex justify-between items-center h-20">
+                <a href="#inicio" class="flex items-center gap-3">
+                    @if($siteLogoUrl)
+                        <div class="logo-shell flex h-12 w-12 items-center justify-center rounded-2xl bg-white ring-1 ring-[#14532d]/10">
+                            <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-9 w-auto object-contain">
+                        </div>
+                    @else
+                        <div class="logo-shell flex h-12 w-12 items-center justify-center rounded-2xl gradient-primary text-white text-lg font-bold">
+                            TG
+                        </div>
+                    @endif
+                    <div>
+                        <span class="block font-bold text-lg leading-tight">{{ $holding['name'] ?? 'Tucu Group' }}</span>
+                        <span class="hidden sm:block text-xs text-gray-500 dark:text-gray-400">{{ $holding['tagline'] ?? 'Holding Empresarial Innovador' }}</span>
                     </div>
-                    <span class="font-bold text-lg hidden sm:inline">{{ $holding['name'] ?? 'Tucu Group' }}</span>
                 </a>
                 <div class="hidden md:flex items-center gap-8">
+                    <a href="#inicio" class="text-sm hover:text-[#14532d] transition">Inicio</a>
                     <a href="#empresas" class="text-sm hover:text-[#14532d] transition">Empresas</a>
                     <a href="#sectores" class="text-sm hover:text-[#14532d] transition">Sectores</a>
                     <a href="#valores" class="text-sm hover:text-[#14532d] transition">Valores</a>
@@ -131,6 +172,7 @@
             
             <!-- Mobile Menu -->
             <div id="mobile-menu" class="hidden md:hidden pb-4 space-y-2">
+                <a href="#inicio" class="block px-4 py-2 hover:text-[#14532d] transition">Inicio</a>
                 <a href="#empresas" class="block px-4 py-2 hover:text-[#14532d] transition">Empresas</a>
                 <a href="#sectores" class="block px-4 py-2 hover:text-[#14532d] transition">Sectores</a>
                 <a href="#valores" class="block px-4 py-2 hover:text-[#14532d] transition">Valores</a>
@@ -314,51 +356,139 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-[#1a1a1a] dark:bg-[#0a0a0a] text-white py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
+    <footer class="relative overflow-hidden bg-[#09110b] text-white py-16 px-4 sm:px-6 lg:px-8">
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute -top-20 left-0 h-56 w-56 rounded-full bg-[#14532d]/30 blur-3xl"></div>
+            <div class="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-[#4ade80]/10 blur-3xl"></div>
+        </div>
+
+        <div class="relative max-w-7xl mx-auto">
             @if(!empty($footerStatistics))
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10 pb-8 border-b border-gray-700/70">
+                <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-10">
                     @foreach($footerStatistics as $stat)
-                        <div class="text-center">
+                        <div class="footer-panel rounded-2xl p-5 text-center">
                             <div class="text-3xl font-bold text-[#4ade80]">{{ $stat['number'] ?? '' }}</div>
-                            <p class="text-gray-400 text-sm mt-1">{{ $stat['label'] ?? '' }}</p>
+                            <p class="text-gray-300 text-sm mt-1 uppercase tracking-[0.18em]">{{ $stat['label'] ?? '' }}</p>
                         </div>
                     @endforeach
                 </div>
             @endif
 
-            <div class="grid md:grid-cols-4 gap-8 mb-8">
-                <div>
-                    <div class="text-2xl font-bold mb-4">{{ $holding['name'] ?? 'Tucu Group' }}</div>
-                    <p class="text-gray-400 text-sm">{{ $holding['tagline'] ?? '' }}</p>
+            <div class="grid xl:grid-cols-[1.35fr_0.8fr_0.85fr] gap-6 mb-8">
+                <div class="footer-panel rounded-3xl p-8 lg:p-10">
+                    <div class="relative z-10">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+                            @if($siteLogoUrl)
+                                <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/95">
+                                    <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-12 w-auto object-contain">
+                                </div>
+                            @else
+                                <div class="flex h-16 w-16 items-center justify-center rounded-2xl gradient-primary text-white text-2xl font-bold">
+                                    TG
+                                </div>
+                            @endif
+                            <div>
+                                <p class="text-sm uppercase tracking-[0.3em] text-[#86efac] mb-2">Tucu Group</p>
+                                <h3 class="text-3xl font-bold">{{ $holding['name'] ?? 'Tucu Group' }}</h3>
+                                <p class="text-gray-300 mt-1">{{ $holding['tagline'] ?? 'Holding Empresarial Innovador' }}</p>
+                            </div>
+                        </div>
+
+                        <p class="text-gray-300 leading-7 max-w-2xl mb-8">
+                            {{ $holding['description'] ?? 'Conectamos industria, innovación y crecimiento para crear empresas con impacto real y una presencia sólida en cada mercado.' }}
+                        </p>
+
+                        <div class="grid sm:grid-cols-3 gap-4 mb-8">
+                            @if(!empty($contact['email']))
+                                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                    <p class="text-xs uppercase tracking-[0.25em] text-[#86efac] mb-2">Email</p>
+                                    <p class="text-sm text-gray-200 break-all">{{ $contact['email'] }}</p>
+                                </div>
+                            @endif
+                            @if(!empty($contact['phone']))
+                                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                    <p class="text-xs uppercase tracking-[0.25em] text-[#86efac] mb-2">Teléfono</p>
+                                    <p class="text-sm text-gray-200">{{ $contact['phone'] }}</p>
+                                </div>
+                            @endif
+                            @if(!empty($contact['location']))
+                                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                    <p class="text-xs uppercase tracking-[0.25em] text-[#86efac] mb-2">Ubicación</p>
+                                    <p class="text-sm text-gray-200">{{ $contact['location'] }}</p>
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="flex flex-wrap gap-3">
+                            <a href="#contacto" class="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-gradient-to-r from-[#14532d] to-[#1f7a45] text-white font-semibold hover:shadow-xl transition">
+                                Hablemos
+                            </a>
+                            <a href="#empresas" class="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-white/15 bg-white/5 text-gray-100 font-semibold hover:bg-white/10 transition">
+                                Ver empresas
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <h4 class="font-bold mb-4 text-sm">Empresa</h4>
-                    <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="#" class="hover:text-[#4ade80] transition">Sobre nosotros</a></li>
-                        <li><a href="#" class="hover:text-[#4ade80] transition">Carreras</a></li>
-                        <li><a href="#" class="hover:text-[#4ade80] transition">Blog</a></li>
-                    </ul>
+
+                <div class="space-y-6">
+                    <div class="footer-panel rounded-3xl p-6">
+                        <div class="relative z-10">
+                            <h4 class="font-bold text-lg mb-5">Navegación rápida</h4>
+                            <ul class="space-y-3 text-sm text-gray-300">
+                                <li><a href="#inicio" class="footer-link flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-4 py-3 hover:border-[#4ade80]/30 hover:text-[#86efac]">Inicio <span>↗</span></a></li>
+                                <li><a href="#empresas" class="footer-link flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-4 py-3 hover:border-[#4ade80]/30 hover:text-[#86efac]">Empresas <span>↗</span></a></li>
+                                <li><a href="#sectores" class="footer-link flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-4 py-3 hover:border-[#4ade80]/30 hover:text-[#86efac]">Sectores <span>↗</span></a></li>
+                                <li><a href="#valores" class="footer-link flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-4 py-3 hover:border-[#4ade80]/30 hover:text-[#86efac]">Valores <span>↗</span></a></li>
+                                <li><a href="#contacto" class="footer-link flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-4 py-3 hover:border-[#4ade80]/30 hover:text-[#86efac]">Contacto <span>↗</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    @if(!empty(array_filter($social)))
+                        <div class="footer-panel rounded-3xl p-6">
+                            <div class="relative z-10">
+                                <h4 class="font-bold text-lg mb-5">Redes</h4>
+                                <div class="grid grid-cols-2 gap-3 text-sm">
+                                    @foreach($social as $network => $url)
+                                        @if(!empty($url))
+                                            <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-center font-medium text-gray-200 hover:border-[#4ade80]/40 hover:bg-white/10 hover:text-[#86efac] transition">
+                                                {{ ucfirst($network) }}
+                                            </a>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
-                <div>
-                    <h4 class="font-bold mb-4 text-sm">Productos</h4>
-                    <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="https://tucuroller.com.ar" target="_blank" class="hover:text-[#4ade80] transition">Tucu Roller</a></li>
-                        <li><a href="#" class="hover:text-[#4ade80] transition">Soluciones Tech</a></li>
-                        <li><a href="#" class="hover:text-[#4ade80] transition">Iniciativas Sostenibles</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4 text-sm">Legal</h4>
-                    <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="#" class="hover:text-[#4ade80] transition">Privacidad</a></li>
-                        <li><a href="#" class="hover:text-[#4ade80] transition">Términos</a></li>
-                        <li><a href="#" class="hover:text-[#4ade80] transition">Cookies</a></li>
-                    </ul>
+
+                <div class="footer-panel rounded-3xl p-6">
+                    <div class="relative z-10">
+                        <h4 class="font-bold text-lg mb-5">Empresas del grupo</h4>
+                        <div class="space-y-4">
+                            @foreach($companies as $company)
+                                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                    <div class="flex items-start justify-between gap-3">
+                                        <div>
+                                            <p class="font-semibold text-white">{{ $company['name'] ?? 'Unidad de negocio' }}</p>
+                                            <p class="text-sm text-gray-300 mt-1">{{ $company['description'] ?? '' }}</p>
+                                        </div>
+                                        @if(!empty($company['website']) && $company['website'] !== '#')
+                                            <a href="{{ $company['website'] }}" target="_blank" rel="noopener noreferrer" class="shrink-0 inline-flex items-center rounded-xl border border-[#4ade80]/20 px-3 py-2 text-xs font-semibold text-[#86efac] hover:bg-[#4ade80]/10 transition">
+                                                Sitio
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="border-t border-gray-700 pt-8 text-center text-gray-400 text-sm">
+
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
                 <p>&copy; {{ now()->year }} {{ $holding['name'] ?? 'Tucu Group' }}. Todos los derechos reservados.</p>
+                <p class="text-center md:text-right">Diseño institucional con foco en marca, claridad y conversión.</p>
             </div>
         </div>
     </footer>

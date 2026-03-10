@@ -34,6 +34,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/configuration/footer', [ConfigurationController::class, 'saveFooter'])->name('configuration.footer');
     Route::post('/configuration/companies', [ConfigurationController::class, 'saveCompanies'])->name('configuration.companies');
     Route::post('/configuration/sectors', [ConfigurationController::class, 'saveSectors'])->name('configuration.sectors');
+    Route::post('/configuration/statistics', [ConfigurationController::class, 'saveStatistics'])->name('configuration.statistics');
+    Route::post('/configuration/values', [ConfigurationController::class, 'saveValues'])->name('configuration.values');
+    Route::post('/configuration/slider', [ConfigurationController::class, 'saveSlider'])->name('configuration.slider');
 });
 
 // Rutas de administración - protegidas con el middleware IsAdmin

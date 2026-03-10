@@ -13,6 +13,10 @@
         accordion5: { open: false },
         accordion6: { open: false },
         accordion7: { open: false },
+        accordion8: { open: false },
+        accordion9: { open: false },
+        accordion10: { open: false },
+        accordion11: { open: false },
     }">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             {{-- Mensajes de éxito --}}
@@ -920,6 +924,269 @@
                             class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
                         >
                             Guardar Sectores
+                        </button>
+                    </div>
+                </form>
+            </x-accordion-item>
+
+            {{-- Estadísticas --}}
+            <x-accordion-item id="9" title="📈 Gestión de Trayectoria y Estadísticas">
+                @php
+                    $statisticsInitial = old('statistics_items', $config['statistics']);
+                    if (!is_array($statisticsInitial) || empty($statisticsInitial)) {
+                        $statisticsInitial = [[
+                            'number' => '',
+                            'label' => '',
+                        ]];
+                    }
+                @endphp
+
+                <form method="POST" action="{{ route('configuration.statistics') }}" class="space-y-6" x-data='{
+                    statistics: @json($statisticsInitial),
+                    addStatistic() {
+                        this.statistics.push({ number: "", label: "" });
+                    },
+                    removeStatistic(index) {
+                        this.statistics.splice(index, 1);
+                    }
+                }'>
+                    @csrf
+
+                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                        Edita la trayectoria y métricas como años, clientes, proyectos y similares.
+                    </p>
+
+                    @error('statistics_items')
+                        <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+
+                    <div class="space-y-4">
+                        <template x-for="(stat, index) in statistics" :key="index">
+                            <div class="p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h4 class="font-semibold text-gray-800 dark:text-gray-100" x-text="`Estadística #${index + 1}`"></h4>
+                                    <button
+                                        type="button"
+                                        x-show="statistics.length > 1"
+                                        @click="removeStatistic(index)"
+                                        class="px-3 py-1 text-sm rounded-lg bg-red-600 hover:bg-red-700 text-white"
+                                    >
+                                        Eliminar
+                                    </button>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Número</label>
+                                        <input type="text" x-model="stat.number" :name="`statistics_items[${index}][number]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="25+">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Etiqueta</label>
+                                        <input type="text" x-model="stat.label" :name="`statistics_items[${index}][label]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="Años de trayectoria">
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <button
+                            type="button"
+                            @click="addStatistic()"
+                            class="px-4 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded-lg transition-colors"
+                        >
+                            + Agregar Estadística
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+                        >
+                            Guardar Estadísticas
+                        </button>
+                    </div>
+                </form>
+            </x-accordion-item>
+
+            {{-- Valores --}}
+            <x-accordion-item id="10" title="⭐ Gestión de Valores">
+                @php
+                    $valuesInitial = old('values_items', $config['values']);
+                    if (!is_array($valuesInitial) || empty($valuesInitial)) {
+                        $valuesInitial = [[
+                            'title' => '',
+                            'description' => '',
+                            'icon' => '',
+                            'color' => '',
+                        ]];
+                    }
+                @endphp
+
+                <form method="POST" action="{{ route('configuration.values') }}" class="space-y-6" x-data='{
+                    values: @json($valuesInitial),
+                    addValue() {
+                        this.values.push({ title: "", description: "", icon: "", color: "" });
+                    },
+                    removeValue(index) {
+                        this.values.splice(index, 1);
+                    }
+                }'>
+                    @csrf
+
+                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                        Administra los valores institucionales que se muestran en la sección de valores.
+                    </p>
+
+                    @error('values_items')
+                        <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+
+                    <div class="space-y-4">
+                        <template x-for="(value, index) in values" :key="index">
+                            <div class="p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h4 class="font-semibold text-gray-800 dark:text-gray-100" x-text="`Valor #${index + 1}`"></h4>
+                                    <button
+                                        type="button"
+                                        x-show="values.length > 1"
+                                        @click="removeValue(index)"
+                                        class="px-3 py-1 text-sm rounded-lg bg-red-600 hover:bg-red-700 text-white"
+                                    >
+                                        Eliminar
+                                    </button>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Título</label>
+                                        <input type="text" x-model="value.title" :name="`values_items[${index}][title]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ícono</label>
+                                        <input type="text" x-model="value.icon" :name="`values_items[${index}][icon]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="lightning, shield, ...">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Color</label>
+                                        <input type="text" x-model="value.color" :name="`values_items[${index}][color]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="green, blue, ...">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Descripción</label>
+                                        <textarea rows="3" x-model="value.description" :name="`values_items[${index}][description]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <button
+                            type="button"
+                            @click="addValue()"
+                            class="px-4 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded-lg transition-colors"
+                        >
+                            + Agregar Valor
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+                        >
+                            Guardar Valores
+                        </button>
+                    </div>
+                </form>
+            </x-accordion-item>
+
+            {{-- Slider --}}
+            <x-accordion-item id="11" title="🎞️ Configuración de Slider">
+                @php
+                    $sliderInitial = old('slider_items', $config['slider']['items'] ?? []);
+                    $sliderEnabledInitial = old('slider_enabled', $config['slider']['enabled'] ?? true);
+                    $sliderAutoplayInitial = old('slider_autoplay_ms', $config['slider']['autoplay_ms'] ?? 5000);
+
+                    if (!is_array($sliderInitial) || empty($sliderInitial)) {
+                        $sliderInitial = [[
+                            'title' => '',
+                            'subtitle' => '',
+                            'image' => '',
+                        ]];
+                    }
+                @endphp
+
+                <form method="POST" action="{{ route('configuration.slider') }}" class="space-y-6" x-data='{
+                    sliderItems: @json($sliderInitial),
+                    addSlide() {
+                        this.sliderItems.push({ title: "", subtitle: "", image: "" });
+                    },
+                    removeSlide(index) {
+                        this.sliderItems.splice(index, 1);
+                    }
+                }'>
+                    @csrf
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <label class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                            <input type="checkbox" name="slider_enabled" value="1" @checked((bool) $sliderEnabledInitial)>
+                            Activar slider en la portada
+                        </label>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Autoplay (ms)</label>
+                            <input type="number" name="slider_autoplay_ms" min="1500" max="20000" value="{{ $sliderAutoplayInitial }}" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                        </div>
+                    </div>
+
+                    @error('slider_items')
+                        <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+
+                    <div class="space-y-4">
+                        <template x-for="(slide, index) in sliderItems" :key="index">
+                            <div class="p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h4 class="font-semibold text-gray-800 dark:text-gray-100" x-text="`Slide #${index + 1}`"></h4>
+                                    <button
+                                        type="button"
+                                        x-show="sliderItems.length > 1"
+                                        @click="removeSlide(index)"
+                                        class="px-3 py-1 text-sm rounded-lg bg-red-600 hover:bg-red-700 text-white"
+                                    >
+                                        Eliminar
+                                    </button>
+                                </div>
+
+                                <div class="grid grid-cols-1 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Título</label>
+                                        <input type="text" x-model="slide.title" :name="`slider_items[${index}][title]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subtítulo</label>
+                                        <input type="text" x-model="slide.subtitle" :name="`slider_items[${index}][subtitle]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">URL de imagen</label>
+                                        <input type="url" x-model="slide.image" :name="`slider_items[${index}][image]`" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="https://...">
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <button
+                            type="button"
+                            @click="addSlide()"
+                            class="px-4 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded-lg transition-colors"
+                        >
+                            + Agregar Slide
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+                        >
+                            Guardar Slider
                         </button>
                     </div>
                 </form>

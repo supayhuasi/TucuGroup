@@ -308,6 +308,92 @@ class ConfigurationController extends Controller
     }
 
     /**
+     * Guardar configuración de Estadísticas
+     */
+    public function saveStatistics(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'statistics_items' => 'required|array|min:1',
+            'statistics_items.*.number' => 'required|string|max:100',
+            'statistics_items.*.label' => 'required|string|max:255',
+        ]);
+
+        $statistics = array_map(static function (array $stat): array {
+            return [
+                'number' => trim($stat['number']),
+                'label' => trim($stat['label']),
+            ];
+        }, $validated['statistics_items']);
+
+        SiteSetting::putValue('statistics_config', $statistics);
+
+        return redirect()->route('configuration.dashboard')
+            ->with('success', 'Estadísticas actualizadas correctamente.');
+    }
+
+    /**
+     * Guardar configuración de Valores
+     */
+    public function saveValues(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'values_items' => 'required|array|min:1',
+            'values_items.*.title' => 'required|string|max:255',
+            'values_items.*.description' => 'required|string|max:1000',
+            'values_items.*.icon' => 'required|string|max:100',
+            'values_items.*.color' => 'required|string|max:100',
+        ]);
+
+        $values = array_map(static function (array $value): array {
+            return [
+                'title' => trim($value['title']),
+                'description' => trim($value['description']),
+                'icon' => trim($value['icon']),
+                'color' => trim($value['color']),
+            ];
+        }, $validated['values_items']);
+
+        SiteSetting::putValue('values_config', $values);
+
+        return redirect()->route('configuration.dashboard')
+            ->with('success', 'Valores actualizados correctamente.');
+    }
+
+    /**
+     * Guardar configuración del Slider
+     */
+    public function saveSlider(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'slider_enabled' => 'nullable|boolean',
+            'slider_autoplay_ms' => 'required|integer|min:1500|max:20000',
+            'slider_items' => 'required|array|min:1',
+            'slider_items.*.title' => 'required|string|max:255',
+            'slider_items.*.subtitle' => 'required|string|max:500',
+            'slider_items.*.image' => 'required|url|max:2048',
+        ]);
+
+        $sliderItems = array_map(static function (array $item): array {
+            return [
+                'title' => trim($item['title']),
+                'subtitle' => trim($item['subtitle']),
+                'image' => trim($item['image']),
+            ];
+        }, $validated['slider_items']);
+
+        $sliderConfig = [
+            'enabled' => $request->has('slider_enabled'),
+            'autoplay_ms' => (int) $validated['slider_autoplay_ms'],
+            'items' => $sliderItems,
+        ];
+
+        SiteSetting::putValue('slider_config', $sliderConfig);
+
+        return redirect()->route('configuration.dashboard')
+            ->with('success', 'Slider actualizado correctamente.');
+    }
+
+    /**
      * Obtener toda la configuración
      */
     private function getConfiguration(): array
@@ -357,6 +443,11 @@ class ConfigurationController extends Controller
             // Empresas y Sectores
             'companies' => SiteSetting::getValue('companies_config', config('institutional.companies', [])),
             'sectors' => SiteSetting::getValue('sectors_config', config('institutional.sectors', [])),
+
+            // Estadísticas, valores y slider
+            'statistics' => SiteSetting::getValue('statistics_config', config('institutional.statistics', [])),
+            'values' => SiteSetting::getValue('values_config', config('institutional.values', [])),
+            'slider' => SiteSetting::getValue('slider_config', config('institutional.slider', [])),
         ];
     }
 }

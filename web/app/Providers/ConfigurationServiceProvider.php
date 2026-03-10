@@ -26,9 +26,12 @@ class ConfigurationServiceProvider extends ServiceProvider
 
     private function mergeConfigurationWithDatabase(): void
     {
-        // Obtener configuración de empresas y sectores de la BD si existen
+        // Obtener configuración de contenido de la BD si existen
         $companies = SiteSetting::getValue('companies_config');
         $sectors = SiteSetting::getValue('sectors_config');
+        $statistics = SiteSetting::getValue('statistics_config');
+        $values = SiteSetting::getValue('values_config');
+        $slider = SiteSetting::getValue('slider_config');
 
         // Si existen en BD, reemplazar la configuración
         if ($companies) {
@@ -37,6 +40,18 @@ class ConfigurationServiceProvider extends ServiceProvider
 
         if ($sectors) {
             config(['institutional.sectors' => $sectors]);
+        }
+
+        if ($statistics) {
+            config(['institutional.statistics' => $statistics]);
+        }
+
+        if ($values) {
+            config(['institutional.values' => $values]);
+        }
+
+        if ($slider) {
+            config(['institutional.slider' => $slider]);
         }
 
         // Actualizar otros datos de configuración también

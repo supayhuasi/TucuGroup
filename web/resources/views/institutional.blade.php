@@ -188,7 +188,7 @@
         }
 
         .nav-link-base {
-            font-size: 1.02rem;
+            font-size: 1.1rem;
             font-weight: 600;
             letter-spacing: 0.01em;
         }
@@ -218,15 +218,15 @@
     <!-- Navigation -->
     <nav class="fixed top-0 w-full overflow-hidden bg-white/80 dark:bg-[#161615]/80 backdrop-blur-md z-50 border-b border-gray-200 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="relative flex items-center justify-center h-[5.5rem] md:h-24 md:grid md:grid-cols-[1fr_auto_1fr] md:gap-6">
+            <div class="relative flex items-center justify-center h-24 md:h-28 md:grid md:grid-cols-[1fr_auto_1fr] md:gap-6">
                 <div class="hidden md:block"></div>
                 <a href="#inicio" class="min-w-0 flex items-center justify-center gap-3 md:justify-self-center">
                     @if($siteLogoUrl)
-                        <div class="logo-shell shrink-0 flex h-9 w-24 sm:h-12 sm:w-36 md:h-14 md:w-44 items-center justify-center rounded-xl bg-white px-2 sm:px-3 ring-1 ring-[#14532d]/10 overflow-hidden max-w-full">
+                        <div class="logo-shell shrink-0 flex h-11 w-28 sm:h-14 sm:w-40 md:h-16 md:w-48 items-center justify-center rounded-xl bg-white px-2 sm:px-3 ring-1 ring-[#14532d]/10 overflow-hidden max-w-full">
                             <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="max-h-full max-w-full object-contain">
                         </div>
                     @else
-                        <div class="logo-shell shrink-0 flex h-9 w-16 sm:h-12 sm:w-28 md:h-14 md:w-32 items-center justify-center rounded-xl gradient-primary text-white text-sm sm:text-base font-bold max-w-full">
+                        <div class="logo-shell shrink-0 flex h-11 w-20 sm:h-14 sm:w-32 md:h-16 md:w-36 items-center justify-center rounded-xl gradient-primary text-white text-base sm:text-lg font-bold max-w-full">
                             TG
                         </div>
                     @endif
@@ -249,11 +249,11 @@
             
             <!-- Mobile Menu -->
             <div id="mobile-menu" class="hidden md:hidden pb-4 space-y-2">
-                <a href="#inicio" class="block px-4 py-2 text-[1.02rem] font-semibold hover:text-[#14532d] transition">Inicio</a>
-                <a href="#empresas" class="block px-4 py-2 text-[1.02rem] font-semibold hover:text-[#14532d] transition">Empresas</a>
-                <a href="#sectores" class="block px-4 py-2 text-[1.02rem] font-semibold hover:text-[#14532d] transition">Sectores</a>
-                <a href="#valores" class="block px-4 py-2 text-[1.02rem] font-semibold hover:text-[#14532d] transition">Valores</a>
-                <a href="#contacto" class="block px-4 py-2 text-[1.02rem] font-semibold bg-gradient-primary text-white rounded-lg">Contacto</a>
+                <a href="#inicio" class="block px-4 py-2 text-[1.08rem] font-semibold hover:text-[#14532d] transition">Inicio</a>
+                <a href="#empresas" class="block px-4 py-2 text-[1.08rem] font-semibold hover:text-[#14532d] transition">Empresas</a>
+                <a href="#sectores" class="block px-4 py-2 text-[1.08rem] font-semibold hover:text-[#14532d] transition">Sectores</a>
+                <a href="#valores" class="block px-4 py-2 text-[1.08rem] font-semibold hover:text-[#14532d] transition">Valores</a>
+                <a href="#contacto" class="block px-4 py-2 text-[1.08rem] font-semibold bg-gradient-primary text-white rounded-lg">Contacto</a>
             </div>
         </div>
     </nav>
@@ -466,7 +466,7 @@
                         <p class="footer-kicker mb-3">Quiénes somos</p>
                         <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-5">
                             @if($siteLogoUrl)
-                                <div class="flex h-12 w-36 sm:h-14 sm:w-40 items-center justify-center rounded-xl bg-white/95 px-3 overflow-hidden">
+                                <div class="flex h-12 w-36 sm:h-14 sm:w-40 items-center justify-center rounded-xl bg-white px-3 overflow-hidden ring-1 ring-[#14532d]/20 shadow-lg shadow-black/20">
                                     <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="max-h-full max-w-full object-contain">
                                 </div>
                             @else

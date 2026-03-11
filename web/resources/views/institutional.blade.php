@@ -211,7 +211,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="relative h-24 md:h-28">
                 <div class="hidden md:flex h-full items-center justify-between">
-                    <div class="flex items-center gap-5 lg:gap-7 pr-4">
+                    <div class="flex items-center gap-8 xl:gap-12 pr-4">
                         <a href="#inicio" class="nav-link-base hover:text-[#14532d] transition">Inicio</a>
                         <a href="#empresas" class="nav-link-base hover:text-[#14532d] transition">Empresas</a>
                         <a href="#sectores" class="nav-link-base hover:text-[#14532d] transition">Sectores</a>

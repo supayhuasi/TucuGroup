@@ -145,17 +145,8 @@
         .footer-panel {
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(2px);
-        }
-
-        .footer-panel::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at top right, rgba(74, 222, 128, 0.16), transparent 42%);
-            pointer-events: none;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(15, 30, 20, 0.85);
         }
 
         .footer-link {
@@ -226,7 +217,7 @@
                     <a href="#valores" class="nav-link-base hover:text-[#14532d] transition">Valores</a>
                     <a href="#contacto" class="nav-link-base px-6 py-2 bg-gradient-primary text-white rounded-lg hover:shadow-lg transition">Contacto</a>
                 </div>
-                <a href="#inicio" class="ml-auto flex items-center pr-0">
+                <a href="#inicio" class="ml-auto flex items-center -mr-4 sm:-mr-6 lg:-mr-8 pr-4 sm:pr-6 lg:pr-8">
                     @if($siteLogoUrl)
                         <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-10 sm:h-12 md:h-14 w-auto max-w-[11rem] md:max-w-[14rem] object-contain">
                     @else
@@ -456,8 +447,8 @@
                     <div class="relative z-10">
                         <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-5">
                             @if($siteLogoUrl)
-                                <div class="flex h-12 w-36 sm:h-14 sm:w-40 items-center justify-center rounded-xl bg-white px-3 overflow-hidden">
-                                    <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="max-h-full max-w-full object-contain">
+                                <div class="flex items-center justify-center rounded-xl bg-white px-4 py-2">
+                                    <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-10 sm:h-12 w-auto max-w-[9rem] sm:max-w-[11rem] object-contain">
                                 </div>
                             @else
                                 <div class="flex h-12 w-24 sm:h-14 sm:w-28 items-center justify-center rounded-xl gradient-primary text-white text-lg sm:text-xl font-bold">

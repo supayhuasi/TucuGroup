@@ -218,11 +218,17 @@
     <!-- Navigation -->
     <nav class="fixed top-0 w-full overflow-hidden bg-white/80 dark:bg-[#161615]/80 backdrop-blur-md z-50 border-b border-gray-200 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="relative flex items-center justify-center h-24 md:h-28 md:grid md:grid-cols-[1fr_auto_1fr] md:gap-6">
-                <div class="hidden md:block"></div>
-                <a href="#inicio" class="min-w-0 flex items-center justify-center gap-3 md:justify-self-center">
+            <div class="relative flex items-center justify-center h-24 md:h-28 md:flex md:items-center md:justify-between">
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#inicio" class="nav-link-base hover:text-[#14532d] transition">Inicio</a>
+                    <a href="#empresas" class="nav-link-base hover:text-[#14532d] transition">Empresas</a>
+                    <a href="#sectores" class="nav-link-base hover:text-[#14532d] transition">Sectores</a>
+                    <a href="#valores" class="nav-link-base hover:text-[#14532d] transition">Valores</a>
+                    <a href="#contacto" class="nav-link-base px-6 py-2 bg-gradient-primary text-white rounded-lg hover:shadow-lg transition">Contacto</a>
+                </div>
+                <a href="#inicio" class="min-w-0 flex items-center justify-center gap-3 md:justify-self-end">
                     @if($siteLogoUrl)
-                        <div class="logo-shell shrink-0 flex h-11 w-28 sm:h-14 sm:w-40 md:h-16 md:w-48 items-center justify-center rounded-xl bg-white px-2 sm:px-3 ring-1 ring-[#14532d]/10 overflow-hidden max-w-full">
+                        <div class="logo-shell shrink-0 flex h-11 w-28 sm:h-14 sm:w-40 md:h-16 md:w-48 items-center justify-center rounded-xl bg-white px-2 sm:px-3 overflow-hidden max-w-full">
                             <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="max-h-full max-w-full object-contain">
                         </div>
                     @else
@@ -231,13 +237,6 @@
                         </div>
                     @endif
                 </a>
-                <div class="hidden md:flex items-center gap-8 md:justify-self-end">
-                    <a href="#inicio" class="nav-link-base hover:text-[#14532d] transition">Inicio</a>
-                    <a href="#empresas" class="nav-link-base hover:text-[#14532d] transition">Empresas</a>
-                    <a href="#sectores" class="nav-link-base hover:text-[#14532d] transition">Sectores</a>
-                    <a href="#valores" class="nav-link-base hover:text-[#14532d] transition">Valores</a>
-                    <a href="#contacto" class="nav-link-base px-6 py-2 bg-gradient-primary text-white rounded-lg hover:shadow-lg transition">Contacto</a>
-                </div>
                 
                 <!-- Mobile Menu Button -->
                 <button id="mobile-menu-btn" class="md:hidden absolute right-0 top-1/2 -translate-y-1/2 p-2">
@@ -441,13 +440,7 @@
             <div class="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-[#4ade80]/20 blur-3xl"></div>
         </div>
 
-        <div class="relative max-w-7xl mx-auto footer-shell rounded-3xl p-6 sm:p-8 lg:p-10">
-            <div class="mb-8">
-                <p class="footer-kicker mb-3">Sección final</p>
-                <h3 class="footer-heading">Información clave para seguir navegando y contactarnos</h3>
-                <p class="mt-3 text-sm sm:text-base text-gray-300 max-w-3xl">Organizamos esta sección para que encuentres rápido quiénes somos, cómo escribirnos y los accesos más importantes del sitio.</p>
-            </div>
-
+        <div class="relative max-w-7xl mx-auto">
             @if(!empty($footerStatistics))
                 <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-10">
                     @foreach($footerStatistics as $stat)
@@ -463,10 +456,9 @@
             <div class="grid lg:grid-cols-12 gap-6 mb-8">
                 <div class="footer-panel rounded-3xl p-8 lg:col-span-5">
                     <div class="relative z-10">
-                        <p class="footer-kicker mb-3">Quiénes somos</p>
                         <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-5">
                             @if($siteLogoUrl)
-                                <div class="flex h-12 w-36 sm:h-14 sm:w-40 items-center justify-center rounded-xl bg-white px-3 overflow-hidden ring-1 ring-[#14532d]/20 shadow-lg shadow-black/20">
+                                <div class="flex h-12 w-36 sm:h-14 sm:w-40 items-center justify-center rounded-xl bg-white px-3 overflow-hidden">
                                     <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="max-h-full max-w-full object-contain">
                                 </div>
                             @else
@@ -492,8 +484,7 @@
 
                 <div class="footer-panel rounded-3xl p-6 lg:col-span-3">
                     <div class="relative z-10">
-                        <p class="footer-kicker mb-2">Accesos rápidos</p>
-                        <h4 class="font-bold text-lg mb-4">Navegación del sitio</h4>
+                        <h4 class="font-bold text-lg mb-4">Navegación</h4>
                         <ul class="space-y-3 text-sm text-gray-300">
                             @foreach($footerLinks as $link)
                                 <li>
@@ -510,8 +501,7 @@
                 <div class="footer-panel rounded-3xl p-6 lg:col-span-4">
                     <div class="relative z-10 space-y-6">
                         <div>
-                            <p class="footer-kicker mb-2">Canales de contacto</p>
-                            <h4 class="font-bold text-lg mb-4">Escribinos por el medio que prefieras</h4>
+                            <h4 class="font-bold text-lg mb-4">Contacto</h4>
                             <div class="space-y-3 text-sm">
                                 @if(!empty($contact['email']))
                                     <div class="rounded-xl border border-white/10 bg-white/5 px-4 py-3">

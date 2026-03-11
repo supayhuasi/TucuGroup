@@ -230,7 +230,7 @@
                 </div>
 
                 <!-- Logo en mobile: fila propia arriba del menú hamburguesa -->
-                <div class="md:hidden flex items-center justify-between py-2 px-4 relative z-50 bg-black bg-opacity-80 backdrop-blur-md">
+                <div class="md:hidden flex items-center justify-between py-2 px-4 relative z-50 bg-white">
                     <a href="#inicio" class="flex-1 flex justify-center items-center">
                         @if($siteLogoUrl)
                             <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-14 sm:h-16 w-auto max-w-[13rem] object-contain drop-shadow-sm">

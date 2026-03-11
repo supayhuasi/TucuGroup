@@ -209,25 +209,36 @@
     <!-- Navigation -->
     <nav class="fixed top-0 w-full bg-white/80 dark:bg-[#161615]/80 backdrop-blur-md z-50 border-b border-gray-200 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="relative flex items-center h-24 md:h-28 md:justify-between">
-                <div class="hidden md:flex items-center gap-6 lg:gap-8">
-                    <a href="#inicio" class="nav-link-base hover:text-[#14532d] transition">Inicio</a>
-                    <a href="#empresas" class="nav-link-base hover:text-[#14532d] transition">Empresas</a>
-                    <a href="#sectores" class="nav-link-base hover:text-[#14532d] transition">Sectores</a>
-                    <a href="#valores" class="nav-link-base hover:text-[#14532d] transition">Valores</a>
-                    <a href="#contacto" class="nav-link-base px-6 py-2 bg-gradient-primary text-white rounded-lg hover:shadow-lg transition">Contacto</a>
+            <div class="relative h-24 md:h-28">
+                <div class="hidden md:flex h-full items-center justify-between">
+                    <div class="flex items-center gap-5 lg:gap-7 pr-4">
+                        <a href="#inicio" class="nav-link-base hover:text-[#14532d] transition">Inicio</a>
+                        <a href="#empresas" class="nav-link-base hover:text-[#14532d] transition">Empresas</a>
+                        <a href="#sectores" class="nav-link-base hover:text-[#14532d] transition">Sectores</a>
+                        <a href="#valores" class="nav-link-base hover:text-[#14532d] transition">Valores</a>
+                        <a href="#contacto" class="nav-link-base px-5 py-2 bg-gradient-primary text-white rounded-lg hover:shadow-lg transition">Contacto</a>
+                    </div>
+                    <a href="#inicio" class="shrink-0 pl-4">
+                        @if($siteLogoUrl)
+                            <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-14 lg:h-16 w-auto max-w-[11rem] lg:max-w-[13rem] object-contain drop-shadow-sm">
+                        @else
+                            <div class="logo-shell flex h-12 w-28 lg:h-14 lg:w-32 items-center justify-center rounded-xl gradient-primary text-white text-base sm:text-lg font-bold">
+                                TG
+                            </div>
+                        @endif
+                    </a>
                 </div>
-                {{-- Logo: centrado absoluto en mobile, extremo derecho en desktop --}}
-                <a href="#inicio" class="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 md:ml-auto flex items-center">
+
+                <a href="#inicio" class="md:hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center">
                     @if($siteLogoUrl)
-                        <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-14 sm:h-16 md:h-16 w-auto max-w-[13rem] md:max-w-[15rem] object-contain drop-shadow-sm">
+                        <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-14 sm:h-16 w-auto max-w-[13rem] object-contain drop-shadow-sm">
                     @else
                         <div class="logo-shell flex h-12 w-24 sm:h-14 sm:w-32 items-center justify-center rounded-xl gradient-primary text-white text-base sm:text-lg font-bold">
                             TG
                         </div>
                     @endif
                 </a>
-                
+
                 <!-- Mobile Menu Button -->
                 <button id="mobile-menu-btn" class="md:hidden absolute right-0 top-1/2 -translate-y-1/2 p-2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

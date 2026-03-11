@@ -184,7 +184,7 @@
                 <a href="#inicio" class="min-w-0 flex items-center justify-center gap-3 md:justify-self-center">
                     @if($siteLogoUrl)
                         <div class="logo-shell shrink-0 flex h-11 w-32 sm:h-14 sm:w-48 items-center justify-center rounded-xl bg-white px-2 sm:px-3 ring-1 ring-[#14532d]/10 overflow-hidden">
-                            <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-8 sm:h-11 w-auto max-w-full object-contain">
+                            <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="max-h-full max-w-full object-contain">
                         </div>
                     @else
                         <div class="logo-shell shrink-0 flex h-11 w-24 sm:h-14 sm:w-32 items-center justify-center rounded-xl gradient-primary text-white text-sm sm:text-base font-bold">
@@ -272,8 +272,8 @@
                 @foreach($companies as $company)
                     <div class="bg-white dark:bg-[#1a1a1a] rounded-2xl p-8 border border-gray-200 dark:border-gray-700 card-hover">
                         @if(!empty($company['logo']))
-                            <div class="mb-6 h-16 w-full max-w-[11rem] overflow-hidden flex items-center justify-center sm:justify-start">
-                                <img src="{{ $company['logo'] }}" alt="Logo {{ $company['name'] ?? 'empresa' }}" class="max-h-14 sm:max-h-16 max-w-full object-contain">
+                            <div class="mb-6 flex h-16 w-full max-w-[12rem] items-center justify-center overflow-hidden rounded-xl border border-gray-100 bg-white p-2 dark:border-gray-700 dark:bg-[#111111] sm:justify-start">
+                                <img src="{{ $company['logo'] }}" alt="Logo {{ $company['name'] ?? 'empresa' }}" class="max-h-full max-w-full object-contain">
                             </div>
                         @else
                             <div class="icon-box gradient-primary text-white">🏢</div>
@@ -420,7 +420,7 @@
                         <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-5">
                             @if($siteLogoUrl)
                                 <div class="flex h-12 w-36 sm:h-14 sm:w-40 items-center justify-center rounded-xl bg-white/95 px-3 overflow-hidden">
-                                    <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-8 sm:h-10 w-auto max-w-full object-contain">
+                                    <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="max-h-full max-w-full object-contain">
                                 </div>
                             @else
                                 <div class="flex h-12 w-24 sm:h-14 sm:w-28 items-center justify-center rounded-xl gradient-primary text-white text-lg sm:text-xl font-bold">

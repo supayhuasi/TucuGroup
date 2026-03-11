@@ -557,7 +557,9 @@
                             @if ($config['site_logo'])
                                 <div class="mb-4">
                                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Logo Actual:</p>
-                                    <img src="{{ Storage::url($config['site_logo']) }}" alt="Logo" class="h-24 object-contain mb-4">
+                                    <div class="mb-4 flex h-24 w-full max-w-xs items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white p-2 dark:border-gray-700 dark:bg-gray-900">
+                                        <img src="{{ Storage::url($config['site_logo']) }}" alt="Logo" class="max-h-full max-w-full object-contain">
+                                    </div>
                                     <form method="POST" action="{{ route('configuration.logo.delete') }}" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
@@ -943,11 +945,14 @@
                                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Logo</label>
                                         <template x-if="company.logo">
                                             <div class="mb-2">
-                                                <img :src="company.logo" alt="Logo actual" class="h-12 w-auto object-contain rounded bg-white p-1 border border-gray-200">
+                                                <div class="flex h-16 w-full max-w-[11rem] items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-white p-2 dark:border-gray-600 dark:bg-gray-900">
+                                                    <img :src="company.logo" alt="Logo actual" class="max-h-full max-w-full object-contain">
+                                                </div>
                                             </div>
                                         </template>
                                         <input type="hidden" :name="`companies_items[${index}][logo]`" :value="company.logo || ''">
                                         <input type="file" accept="image/*" :name="`companies_items[${index}][logo_file]`" class="w-full text-sm text-gray-700 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700">
+                                        <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Recomendado: logo horizontal 320x120 px o superior, con fondo transparente.</p>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estado (opcional)</label>

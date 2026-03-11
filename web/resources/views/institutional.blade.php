@@ -230,7 +230,7 @@
                 </div>
 
                 <!-- Logo en mobile: fila propia arriba del menú hamburguesa -->
-                <div class="md:hidden flex justify-center items-center py-2 relative z-50 bg-white bg-opacity-90">
+                <div class="md:hidden flex justify-center items-center py-2 relative z-50 bg-white">
                     <a href="#inicio" class="flex items-center">
                         @if($siteLogoUrl)
                             <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-14 sm:h-16 w-auto max-w-[13rem] object-contain drop-shadow-sm">
@@ -251,7 +251,7 @@
             </div>
             
             <!-- Mobile Menu -->
-            <div id="mobile-menu" class="hidden md:hidden pb-4 space-y-2">
+            <div id="mobile-menu" class="hidden md:hidden pb-4 space-y-2 bg-white rounded-b-xl shadow-lg mx-2 mt-1">
                 <a href="#inicio" class="block px-4 py-2 text-[1.08rem] font-semibold hover:text-[#14532d] transition">Inicio</a>
                 <a href="#empresas" class="block px-4 py-2 text-[1.08rem] font-semibold hover:text-[#14532d] transition">Empresas</a>
                 <a href="#sectores" class="block px-4 py-2 text-[1.08rem] font-semibold hover:text-[#14532d] transition">Sectores</a>

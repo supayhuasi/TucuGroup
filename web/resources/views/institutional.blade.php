@@ -135,19 +135,26 @@
             box-shadow: 0 4px 12px rgba(31, 122, 69, 0.16);
         }
 
+        .footer-shell {
+            position: relative;
+            border: 1px solid rgba(134, 239, 172, 0.14);
+            background: linear-gradient(180deg, rgba(6, 14, 10, 0.95) 0%, rgba(8, 18, 13, 0.92) 100%);
+            box-shadow: 0 24px 55px rgba(0, 0, 0, 0.25);
+        }
+
         .footer-panel {
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: linear-gradient(145deg, rgba(21, 34, 24, 0.96), rgba(10, 15, 11, 0.96));
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.24);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(2px);
         }
 
         .footer-panel::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at top right, rgba(74, 222, 128, 0.18), transparent 42%);
+            background: radial-gradient(circle at top right, rgba(74, 222, 128, 0.16), transparent 42%);
             pointer-events: none;
         }
 
@@ -156,7 +163,39 @@
         }
 
         .footer-link:hover {
-            transform: translateX(6px);
+            transform: translateX(4px);
+        }
+
+        .footer-kicker {
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            font-size: 0.72rem;
+            color: #86efac;
+            font-weight: 600;
+        }
+
+        .footer-heading {
+            font-size: 1.65rem;
+            line-height: 1.2;
+            font-weight: 700;
+            color: #f0fdf4;
+        }
+
+        @media (min-width: 640px) {
+            .footer-heading {
+                font-size: 1.95rem;
+            }
+        }
+
+        .nav-link-base {
+            font-size: 1.02rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        .hero-title-balance {
+            line-height: 1.08;
+            letter-spacing: -0.02em;
         }
 
         .logo-shell {
@@ -177,31 +216,31 @@
     @endif
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full bg-white/80 dark:bg-[#161615]/80 backdrop-blur-md z-50 border-b border-gray-200 dark:border-gray-700">
+    <nav class="fixed top-0 w-full overflow-hidden bg-white/80 dark:bg-[#161615]/80 backdrop-blur-md z-50 border-b border-gray-200 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="relative flex items-center justify-between h-20 md:grid md:grid-cols-[1fr_auto_1fr] md:gap-6">
+            <div class="relative flex items-center justify-center h-[5.5rem] md:h-24 md:grid md:grid-cols-[1fr_auto_1fr] md:gap-6">
                 <div class="hidden md:block"></div>
                 <a href="#inicio" class="min-w-0 flex items-center justify-center gap-3 md:justify-self-center">
                     @if($siteLogoUrl)
-                        <div class="logo-shell shrink-0 flex h-11 w-32 sm:h-14 sm:w-48 items-center justify-center rounded-xl bg-white px-2 sm:px-3 ring-1 ring-[#14532d]/10 overflow-hidden">
+                        <div class="logo-shell shrink-0 flex h-9 w-24 sm:h-12 sm:w-36 md:h-14 md:w-44 items-center justify-center rounded-xl bg-white px-2 sm:px-3 ring-1 ring-[#14532d]/10 overflow-hidden max-w-full">
                             <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="max-h-full max-w-full object-contain">
                         </div>
                     @else
-                        <div class="logo-shell shrink-0 flex h-11 w-24 sm:h-14 sm:w-32 items-center justify-center rounded-xl gradient-primary text-white text-sm sm:text-base font-bold">
+                        <div class="logo-shell shrink-0 flex h-9 w-16 sm:h-12 sm:w-28 md:h-14 md:w-32 items-center justify-center rounded-xl gradient-primary text-white text-sm sm:text-base font-bold max-w-full">
                             TG
                         </div>
                     @endif
                 </a>
                 <div class="hidden md:flex items-center gap-8 md:justify-self-end">
-                    <a href="#inicio" class="text-sm hover:text-[#14532d] transition">Inicio</a>
-                    <a href="#empresas" class="text-sm hover:text-[#14532d] transition">Empresas</a>
-                    <a href="#sectores" class="text-sm hover:text-[#14532d] transition">Sectores</a>
-                    <a href="#valores" class="text-sm hover:text-[#14532d] transition">Valores</a>
-                    <a href="#contacto" class="text-sm px-6 py-2 bg-gradient-primary text-white rounded-lg hover:shadow-lg transition">Contacto</a>
+                    <a href="#inicio" class="nav-link-base hover:text-[#14532d] transition">Inicio</a>
+                    <a href="#empresas" class="nav-link-base hover:text-[#14532d] transition">Empresas</a>
+                    <a href="#sectores" class="nav-link-base hover:text-[#14532d] transition">Sectores</a>
+                    <a href="#valores" class="nav-link-base hover:text-[#14532d] transition">Valores</a>
+                    <a href="#contacto" class="nav-link-base px-6 py-2 bg-gradient-primary text-white rounded-lg hover:shadow-lg transition">Contacto</a>
                 </div>
                 
                 <!-- Mobile Menu Button -->
-                <button id="mobile-menu-btn" class="md:hidden p-2">
+                <button id="mobile-menu-btn" class="md:hidden absolute right-0 top-1/2 -translate-y-1/2 p-2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
@@ -210,11 +249,11 @@
             
             <!-- Mobile Menu -->
             <div id="mobile-menu" class="hidden md:hidden pb-4 space-y-2">
-                <a href="#inicio" class="block px-4 py-2 hover:text-[#14532d] transition">Inicio</a>
-                <a href="#empresas" class="block px-4 py-2 hover:text-[#14532d] transition">Empresas</a>
-                <a href="#sectores" class="block px-4 py-2 hover:text-[#14532d] transition">Sectores</a>
-                <a href="#valores" class="block px-4 py-2 hover:text-[#14532d] transition">Valores</a>
-                <a href="#contacto" class="block px-4 py-2 bg-gradient-primary text-white rounded-lg">Contacto</a>
+                <a href="#inicio" class="block px-4 py-2 text-[1.02rem] font-semibold hover:text-[#14532d] transition">Inicio</a>
+                <a href="#empresas" class="block px-4 py-2 text-[1.02rem] font-semibold hover:text-[#14532d] transition">Empresas</a>
+                <a href="#sectores" class="block px-4 py-2 text-[1.02rem] font-semibold hover:text-[#14532d] transition">Sectores</a>
+                <a href="#valores" class="block px-4 py-2 text-[1.02rem] font-semibold hover:text-[#14532d] transition">Valores</a>
+                <a href="#contacto" class="block px-4 py-2 text-[1.02rem] font-semibold bg-gradient-primary text-white rounded-lg">Contacto</a>
             </div>
         </div>
     </nav>
@@ -238,22 +277,22 @@
     @endif
 
     <!-- Hero Section -->
-    <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50 dark:from-[#161615] dark:to-[#0a0a0a]">
+    <section class="pt-36 md:pt-40 pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50 dark:from-[#161615] dark:to-[#0a0a0a]">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-12">
+            <div class="text-center mb-14">
                 @if(!empty($hero['badge']))
                     <div class="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full border border-[#14532d]/20 bg-[#ecfdf3] dark:bg-[#1f2a22] text-sm font-medium text-[#14532d] dark:text-[#86efac]">
                         <span class="inline-block h-2 w-2 rounded-full bg-[#22c55e]"></span>
                         <span>{{ $hero['badge'] }}</span>
                     </div>
                 @endif
-                <h1 class="text-5xl sm:text-6xl font-bold mb-6 leading-tight">
+                <h1 class="hero-title-balance text-4xl sm:text-5xl lg:text-6xl font-bold mb-7">
                     {{ $hero['title_line_1'] ?? '' }}
                 </h1>
-                <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8">
+                <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-10 leading-relaxed">
                     {{ $hero['description'] ?? '' }}
                 </p>
-                <a href="{{ $hero['cta_link'] ?? '#empresas' }}" class="inline-block px-8 py-4 bg-gradient-primary text-white rounded-lg font-semibold hover:shadow-xl transition transform hover:scale-105">
+                <a href="{{ $hero['cta_link'] ?? '#empresas' }}" class="inline-block px-8 py-4 bg-gradient-primary text-white rounded-xl text-base font-semibold hover:shadow-xl transition transform hover:scale-105">
                     {{ $hero['cta_text'] ?? 'Explorar Empresas' }}
                 </a>
             </div>
@@ -396,19 +435,26 @@
     </section>
 
     <!-- Footer -->
-    <footer class="relative overflow-hidden bg-[#09110b] text-white py-16 px-4 sm:px-6 lg:px-8">
+    <footer class="relative overflow-hidden bg-[#050b07] text-white py-16 px-4 sm:px-6 lg:px-8">
         <div class="absolute inset-0 pointer-events-none">
-            <div class="absolute -top-20 left-0 h-56 w-56 rounded-full bg-[#14532d]/30 blur-3xl"></div>
-            <div class="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-[#4ade80]/10 blur-3xl"></div>
+            <div class="absolute -top-20 left-0 h-56 w-56 rounded-full bg-[#14532d]/25 blur-3xl"></div>
+            <div class="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-[#4ade80]/20 blur-3xl"></div>
         </div>
 
-        <div class="relative max-w-7xl mx-auto">
+        <div class="relative max-w-7xl mx-auto footer-shell rounded-3xl p-6 sm:p-8 lg:p-10">
+            <div class="mb-8">
+                <p class="footer-kicker mb-3">Sección final</p>
+                <h3 class="footer-heading">Información clave para seguir navegando y contactarnos</h3>
+                <p class="mt-3 text-sm sm:text-base text-gray-300 max-w-3xl">Organizamos esta sección para que encuentres rápido quiénes somos, cómo escribirnos y los accesos más importantes del sitio.</p>
+            </div>
+
             @if(!empty($footerStatistics))
                 <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-10">
                     @foreach($footerStatistics as $stat)
                         <div class="footer-panel rounded-2xl p-5 text-center">
-                            <div class="text-3xl font-bold text-[#4ade80]">{{ $stat['number'] ?? '' }}</div>
-                            <p class="text-gray-300 text-sm mt-1 uppercase tracking-[0.18em]">{{ $stat['label'] ?? '' }}</p>
+                            <p class="text-xs uppercase tracking-[0.16em] text-[#86efac] mb-1">Indicador</p>
+                            <div class="text-3xl font-bold text-[#bbf7d0]">{{ $stat['number'] ?? '' }}</div>
+                            <p class="text-gray-200 text-sm mt-1">{{ $stat['label'] ?? '' }}</p>
                         </div>
                     @endforeach
                 </div>
@@ -417,6 +463,7 @@
             <div class="grid lg:grid-cols-12 gap-6 mb-8">
                 <div class="footer-panel rounded-3xl p-8 lg:col-span-5">
                     <div class="relative z-10">
+                        <p class="footer-kicker mb-3">Quiénes somos</p>
                         <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-5">
                             @if($siteLogoUrl)
                                 <div class="flex h-12 w-36 sm:h-14 sm:w-40 items-center justify-center rounded-xl bg-white/95 px-3 overflow-hidden">
@@ -445,11 +492,12 @@
 
                 <div class="footer-panel rounded-3xl p-6 lg:col-span-3">
                     <div class="relative z-10">
-                        <h4 class="font-bold text-lg mb-4">Navegación</h4>
+                        <p class="footer-kicker mb-2">Accesos rápidos</p>
+                        <h4 class="font-bold text-lg mb-4">Navegación del sitio</h4>
                         <ul class="space-y-3 text-sm text-gray-300">
                             @foreach($footerLinks as $link)
                                 <li>
-                                    <a href="{{ $link['url'] }}" class="footer-link flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-4 py-3 hover:border-[#4ade80]/30 hover:text-[#86efac]">
+                                    <a href="{{ $link['url'] }}" class="footer-link flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3 hover:border-[#4ade80]/40 hover:text-[#bbf7d0]">
                                         <span>{{ $link['label'] }}</span>
                                         <span>↗</span>
                                     </a>
@@ -462,7 +510,8 @@
                 <div class="footer-panel rounded-3xl p-6 lg:col-span-4">
                     <div class="relative z-10 space-y-6">
                         <div>
-                            <h4 class="font-bold text-lg mb-4">Contacto</h4>
+                            <p class="footer-kicker mb-2">Canales de contacto</p>
+                            <h4 class="font-bold text-lg mb-4">Escribinos por el medio que prefieras</h4>
                             <div class="space-y-3 text-sm">
                                 @if(!empty($contact['email']))
                                     <div class="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
@@ -487,10 +536,10 @@
 
                         @if(!empty($footerSocial))
                             <div>
-                                <h4 class="font-bold text-lg mb-4">Redes</h4>
+                                <h4 class="font-bold text-lg mb-4">Redes sociales</h4>
                                 <div class="grid grid-cols-2 gap-3 text-sm">
                                     @foreach($footerSocial as $network => $url)
-                                        <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center font-medium text-gray-200 hover:border-[#4ade80]/40 hover:bg-white/10 hover:text-[#86efac] transition">
+                                        <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center font-medium text-gray-200 hover:border-[#4ade80]/40 hover:bg-white/10 hover:text-[#bbf7d0] transition">
                                             {{ ucfirst($network) }}
                                         </a>
                                     @endforeach
@@ -501,9 +550,9 @@
                 </div>
             </div>
 
-            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-300">
                 <p>{{ $footerCopyright }}</p>
-                <p class="text-center md:text-right">Footer configurable desde el panel de administración.</p>
+                <p class="text-center md:text-right">Podés editar este bloque desde el panel de administración.</p>
             </div>
         </div>
     </footer>

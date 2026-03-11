@@ -229,15 +229,18 @@
                     </a>
                 </div>
 
-                <a href="#inicio" class="md:hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center">
-                    @if($siteLogoUrl)
-                        <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-14 sm:h-16 w-auto max-w-[13rem] object-contain drop-shadow-sm">
-                    @else
-                        <div class="logo-shell flex h-12 w-24 sm:h-14 sm:w-32 items-center justify-center rounded-xl gradient-primary text-white text-base sm:text-lg font-bold">
-                            TG
-                        </div>
-                    @endif
-                </a>
+                <!-- Logo en mobile: fila propia arriba del menú hamburguesa -->
+                <div class="md:hidden flex justify-center items-center py-2 relative z-50 bg-black bg-opacity-80">
+                    <a href="#inicio" class="flex items-center">
+                        @if($siteLogoUrl)
+                            <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-14 sm:h-16 w-auto max-w-[13rem] object-contain drop-shadow-sm">
+                        @else
+                            <div class="logo-shell flex h-12 w-24 sm:h-14 sm:w-32 items-center justify-center rounded-xl gradient-primary text-white text-base sm:text-lg font-bold">
+                                TG
+                            </div>
+                        @endif
+                    </a>
+                </div>
 
                 <!-- Mobile Menu Button -->
                 <button id="mobile-menu-btn" class="md:hidden absolute right-0 top-1/2 -translate-y-1/2 p-2">

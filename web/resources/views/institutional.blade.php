@@ -179,7 +179,7 @@
         }
 
         .nav-link-base {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             letter-spacing: 0.01em;
         }
@@ -207,10 +207,10 @@
     @endif
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full overflow-hidden bg-white/80 dark:bg-[#161615]/80 backdrop-blur-md z-50 border-b border-gray-200 dark:border-gray-700">
+    <nav class="fixed top-0 w-full bg-white/80 dark:bg-[#161615]/80 backdrop-blur-md z-50 border-b border-gray-200 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="relative flex items-center h-24 md:h-28">
-                <div class="hidden md:flex items-center gap-8">
+            <div class="relative flex items-center h-24 md:h-28 md:justify-between">
+                <div class="hidden md:flex items-center gap-6 lg:gap-8">
                     <a href="#inicio" class="nav-link-base hover:text-[#14532d] transition">Inicio</a>
                     <a href="#empresas" class="nav-link-base hover:text-[#14532d] transition">Empresas</a>
                     <a href="#sectores" class="nav-link-base hover:text-[#14532d] transition">Sectores</a>

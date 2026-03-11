@@ -299,7 +299,7 @@
                 @foreach($companies as $company)
                     <div class="bg-white dark:bg-[#1a1a1a] rounded-2xl p-8 border border-gray-200 dark:border-gray-700 card-hover">
                         @if(!empty($company['logo']))
-                            <div class="mb-6 flex h-16 w-full max-w-[12rem] items-center justify-center overflow-hidden rounded-xl border border-gray-100 bg-white p-2 dark:border-gray-700 dark:bg-[#111111] sm:justify-start">
+                            <div class="mb-6 flex h-28 w-full items-center justify-center rounded-xl border border-gray-100 bg-white p-3 dark:border-gray-700 dark:bg-[#111111] sm:justify-start">
                                 <img src="{{ $company['logo'] }}" alt="Logo {{ $company['name'] ?? 'empresa' }}" class="max-h-full max-w-full object-contain">
                             </div>
                         @else

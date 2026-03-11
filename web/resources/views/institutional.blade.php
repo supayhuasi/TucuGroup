@@ -527,14 +527,16 @@
 
                         @if(!empty($footerSocial))
                             <div>
-                                <h4 class="font-bold text-lg mb-4">Redes sociales</h4>
-                                <div class="grid grid-cols-2 gap-3 text-sm">
-                                    @foreach($footerSocial as $network => $url)
-                                        <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center font-medium text-gray-200 hover:border-[#4ade80]/40 hover:bg-white/10 hover:text-[#bbf7d0] transition">
-                                            {{ ucfirst($network) }}
-                                        </a>
-                                    @endforeach
-                                </div>
+                                @if(count($footerSocial) > 0)
+                                    <h4 class="font-bold text-lg mb-4">Redes sociales</h4>
+                                    <div class="grid grid-cols-2 gap-3 text-sm">
+                                        @foreach($footerSocial as $network => $url)
+                                            <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center font-medium text-gray-200 hover:border-[#4ade80]/40 hover:bg-white/10 hover:text-[#bbf7d0] transition">
+                                                {{ ucfirst($network) }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
                         @endif
                     </div>

@@ -70,8 +70,25 @@ class ConfigurationServiceProvider extends ServiceProvider
                 'cta_text' => SiteSetting::getValue('hero_cta_text', config('institutional.hero.cta_text')),
                 'cta_link' => SiteSetting::getValue('hero_cta_link', config('institutional.hero.cta_link')),
             ],
+            'contact' => [
+                'section_title' => SiteSetting::getValue('contact_section_title', config('institutional.contact.section_title', 'Ponte en Contacto')),
+                'section_subtitle' => SiteSetting::getValue('contact_section_subtitle', config('institutional.contact.section_subtitle', 'Estamos aquí para ayudarte')),
+                'email_label' => SiteSetting::getValue('contact_label_email', config('institutional.contact.email_label', 'Email')),
+                'phone_label' => SiteSetting::getValue('contact_label_phone', config('institutional.contact.phone_label', 'Teléfono')),
+                'location_label' => SiteSetting::getValue('contact_label_location', config('institutional.contact.location_label', 'Ubicación')),
+                'email' => SiteSetting::getValue('company_email', config('institutional.contact.email')),
+                'phone' => SiteSetting::getValue('company_phone', config('institutional.contact.phone')),
+                'location' => SiteSetting::getValue('company_address', config('institutional.contact.location')),
+                'address' => SiteSetting::getValue('company_address', config('institutional.contact.address')),
+            ],
+            'seo' => [
+                'title' => SiteSetting::getValue('seo_title', config('institutional.seo.title')),
+                'description' => SiteSetting::getValue('seo_description', config('institutional.seo.description')),
+                'keywords' => SiteSetting::getValue('seo_keywords', config('institutional.seo.keywords')),
+            ],
         ];
 
         config(['institutional' => array_merge(config('institutional'), $institutionalData)]);
+        config(['app.name' => SiteSetting::getValue('company_name', config('app.name', 'Tucu Group'))]);
     }
 }

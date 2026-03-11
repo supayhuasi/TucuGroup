@@ -351,27 +351,27 @@
     <section id="contacto" class="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-[#161615]">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Ponte en Contacto</h2>
-                <p class="text-gray-600 dark:text-gray-400 text-lg">Estamos aquí para ayudarte</p>
+                <h2 class="text-4xl font-bold mb-4">{{ $contact['section_title'] ?? 'Ponte en Contacto' }}</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-lg">{{ $contact['section_subtitle'] ?? 'Estamos aquí para ayudarte' }}</p>
             </div>
 
             <div class="grid md:grid-cols-3 gap-8 mb-12">
                 @component('components.contact-card', [
-                    'title' => 'Email',
+                    'title' => $contact['email_label'] ?? 'Email',
                     'content' => $contact['email'] ?? '',
                     'icon' => '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>'
                 ])
                 @endcomponent
 
                 @component('components.contact-card', [
-                    'title' => 'Teléfono',
+                    'title' => $contact['phone_label'] ?? 'Teléfono',
                     'content' => $contact['phone'] ?? '',
                     'icon' => '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.793.894c.067.614.1 1.238.1 1.868 0 .63-.033 1.254-.1 1.868l1.793.894a1 1 0 01.54 1.06l-.74 4.435a1 1 0 01-.986.836H3a1 1 0 01-1-1V3z"/></svg>'
                 ])
                 @endcomponent
 
                 @component('components.contact-card', [
-                    'title' => 'Ubicación',
+                    'title' => $contact['location_label'] ?? 'Ubicación',
                     'content' => $contact['location'] ?? '',
                     'icon' => '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"/></svg>'
                 ])

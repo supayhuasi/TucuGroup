@@ -17,6 +17,7 @@
         accordion9: { open: false },
         accordion10: { open: false },
         accordion11: { open: false },
+        accordion12: { open: false },
     }">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             {{-- Mensajes de éxito --}}
@@ -174,6 +175,61 @@
                                 @enderror
                             </div>
                         </div>
+                    </div>
+
+                    {{-- Sección de contacto (editable) --}}
+                    <div class="border-t border-gray-200 dark:border-gray-700 pt-6 space-y-6">
+                        <h4 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Sección "Ponte en Contacto"</h4>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="contact_section_title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Título de sección
+                                </label>
+                                <input
+                                    type="text"
+                                    id="contact_section_title"
+                                    name="contact_section_title"
+                                    value="{{ old('contact_section_title', $config['contact_section_title']) }}"
+                                    required
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                            </div>
+                            <div>
+                                <label for="contact_section_subtitle" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Subtítulo de sección
+                                </label>
+                                <input
+                                    type="text"
+                                    id="contact_section_subtitle"
+                                    name="contact_section_subtitle"
+                                    value="{{ old('contact_section_subtitle', $config['contact_section_subtitle']) }}"
+                                    required
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <label for="contact_label_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Etiqueta Email</label>
+                                <input type="text" id="contact_label_email" name="contact_label_email" value="{{ old('contact_label_email', $config['contact_label_email']) }}" required class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                            </div>
+                            <div>
+                                <label for="contact_label_phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Etiqueta Teléfono</label>
+                                <input type="text" id="contact_label_phone" name="contact_label_phone" value="{{ old('contact_label_phone', $config['contact_label_phone']) }}" required class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                            </div>
+                            <div>
+                                <label for="contact_label_location" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Etiqueta Ubicación</label>
+                                <input type="text" id="contact_label_location" name="contact_label_location" value="{{ old('contact_label_location', $config['contact_label_location']) }}" required class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                            </div>
+                        </div>
+
+                        @error('contact_section_title')<p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>@enderror
+                        @error('contact_section_subtitle')<p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>@enderror
+                        @error('contact_label_email')<p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>@enderror
+                        @error('contact_label_phone')<p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>@enderror
+                        @error('contact_label_location')<p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>@enderror
                     </div>
 
                     {{-- Teléfono --}}
@@ -1303,6 +1359,64 @@
                             class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
                         >
                             Guardar Slider
+                        </button>
+                    </div>
+                </form>
+            </x-accordion-item>
+
+            {{-- SEO --}}
+            <x-accordion-item id="12" title="🔎 Configuración SEO">
+                <form method="POST" action="{{ route('configuration.seo') }}" class="space-y-6">
+                    @csrf
+
+                    <div>
+                        <label for="seo_title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Título SEO</label>
+                        <input
+                            type="text"
+                            id="seo_title"
+                            name="seo_title"
+                            value="{{ old('seo_title', $config['seo_title']) }}"
+                            required
+                            class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                        @error('seo_title')
+                            <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="seo_description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Descripción SEO</label>
+                        <textarea
+                            id="seo_description"
+                            name="seo_description"
+                            rows="4"
+                            required
+                            class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        >{{ old('seo_description', $config['seo_description']) }}</textarea>
+                        @error('seo_description')
+                            <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="seo_keywords" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Keywords SEO (separadas por coma)</label>
+                        <textarea
+                            id="seo_keywords"
+                            name="seo_keywords"
+                            rows="3"
+                            class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        >{{ old('seo_keywords', $config['seo_keywords']) }}</textarea>
+                        @error('seo_keywords')
+                            <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button
+                            type="submit"
+                            class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+                        >
+                            Guardar SEO
                         </button>
                     </div>
                 </form>

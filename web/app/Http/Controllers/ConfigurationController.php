@@ -33,6 +33,11 @@ class ConfigurationController extends Controller
             'hero_description' => 'required|string|max:1000',
             'hero_cta_text' => 'required|string|max:120',
             'hero_cta_link' => 'nullable|string|max:255',
+            'contact_section_title' => 'required|string|max:255',
+            'contact_section_subtitle' => 'required|string|max:500',
+            'contact_label_email' => 'required|string|max:80',
+            'contact_label_phone' => 'required|string|max:80',
+            'contact_label_location' => 'required|string|max:80',
             'company_phone' => 'required|string|max:20',
             'company_email' => 'required|email|max:255',
             'company_address' => 'required|string|max:500',
@@ -402,6 +407,25 @@ class ConfigurationController extends Controller
     }
 
     /**
+     * Guardar configuración SEO
+     */
+    public function saveSeo(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'seo_title' => 'required|string|max:255',
+            'seo_description' => 'required|string|max:500',
+            'seo_keywords' => 'nullable|string|max:500',
+        ]);
+
+        foreach ($validated as $key => $value) {
+            SiteSetting::putValue($key, $value);
+        }
+
+        return redirect()->route('configuration.dashboard')
+            ->with('success', 'Configuración SEO actualizada correctamente.');
+    }
+
+    /**
      * Obtener toda la configuración
      */
     private function getConfiguration(): array
@@ -416,6 +440,11 @@ class ConfigurationController extends Controller
             'hero_description' => SiteSetting::getValue('hero_description', config('institutional.hero.description', '')),
             'hero_cta_text' => SiteSetting::getValue('hero_cta_text', config('institutional.hero.cta_text', 'Explorar Empresas')),
             'hero_cta_link' => SiteSetting::getValue('hero_cta_link', config('institutional.hero.cta_link', '#empresas')),
+            'contact_section_title' => SiteSetting::getValue('contact_section_title', 'Ponte en Contacto'),
+            'contact_section_subtitle' => SiteSetting::getValue('contact_section_subtitle', 'Estamos aquí para ayudarte'),
+            'contact_label_email' => SiteSetting::getValue('contact_label_email', 'Email'),
+            'contact_label_phone' => SiteSetting::getValue('contact_label_phone', 'Teléfono'),
+            'contact_label_location' => SiteSetting::getValue('contact_label_location', 'Ubicación'),
             'company_phone' => SiteSetting::getValue('company_phone', ''),
             'company_email' => SiteSetting::getValue('company_email', ''),
             'company_address' => SiteSetting::getValue('company_address', ''),
@@ -462,6 +491,11 @@ class ConfigurationController extends Controller
             'statistics' => SiteSetting::getValue('statistics_config', config('institutional.statistics', [])),
             'values' => SiteSetting::getValue('values_config', config('institutional.values', [])),
             'slider' => SiteSetting::getValue('slider_config', config('institutional.slider', [])),
+
+            // SEO institucional
+            'seo_title' => SiteSetting::getValue('seo_title', config('institutional.seo.title', 'Tucu Group - Holding Empresarial Innovador')),
+            'seo_description' => SiteSetting::getValue('seo_description', config('institutional.seo.description', 'Tucu Group es un holding empresarial que integra negocios innovadores con impacto en la sociedad y la industria.')),
+            'seo_keywords' => SiteSetting::getValue('seo_keywords', config('institutional.seo.keywords', 'Tucu Group, holding, empresarial')),
         ];
     }
 }

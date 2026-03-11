@@ -201,6 +201,11 @@ return [
 
     // Contacto
     'contact' => [
+        'section_title' => 'Ponte en Contacto',
+        'section_subtitle' => 'Estamos aquí para ayudarte',
+        'email_label' => 'Email',
+        'phone_label' => 'Teléfono',
+        'location_label' => 'Ubicación',
         'email' => 'info@tucugroup.com.ar',
         'phone' => '+54 (Área) XXXX-XXXX',
         'location' => 'Argentina',

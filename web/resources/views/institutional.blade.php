@@ -209,7 +209,7 @@
     <!-- Navigation -->
     <nav class="fixed top-0 w-full overflow-hidden bg-white/80 dark:bg-[#161615]/80 backdrop-blur-md z-50 border-b border-gray-200 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="relative flex items-center justify-center h-24 md:h-28 md:flex md:items-center md:justify-between">
+            <div class="relative flex items-center h-24 md:h-28">
                 <div class="hidden md:flex items-center gap-8">
                     <a href="#inicio" class="nav-link-base hover:text-[#14532d] transition">Inicio</a>
                     <a href="#empresas" class="nav-link-base hover:text-[#14532d] transition">Empresas</a>
@@ -217,11 +217,12 @@
                     <a href="#valores" class="nav-link-base hover:text-[#14532d] transition">Valores</a>
                     <a href="#contacto" class="nav-link-base px-6 py-2 bg-gradient-primary text-white rounded-lg hover:shadow-lg transition">Contacto</a>
                 </div>
-                <a href="#inicio" class="ml-auto flex items-center -mr-4 sm:-mr-6 lg:-mr-8 pr-4 sm:pr-6 lg:pr-8">
+                {{-- Logo: centrado absoluto en mobile, extremo derecho en desktop --}}
+                <a href="#inicio" class="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 md:ml-auto flex items-center">
                     @if($siteLogoUrl)
-                        <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-10 sm:h-12 md:h-14 w-auto max-w-[11rem] md:max-w-[14rem] object-contain">
+                        <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-14 sm:h-16 md:h-16 w-auto max-w-[13rem] md:max-w-[15rem] object-contain drop-shadow-sm">
                     @else
-                        <div class="logo-shell flex h-10 w-20 sm:h-12 sm:w-28 md:h-14 md:w-32 items-center justify-center rounded-xl gradient-primary text-white text-base sm:text-lg font-bold">
+                        <div class="logo-shell flex h-12 w-24 sm:h-14 sm:w-32 items-center justify-center rounded-xl gradient-primary text-white text-base sm:text-lg font-bold">
                             TG
                         </div>
                     @endif

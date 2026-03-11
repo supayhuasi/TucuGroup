@@ -226,13 +226,11 @@
                     <a href="#valores" class="nav-link-base hover:text-[#14532d] transition">Valores</a>
                     <a href="#contacto" class="nav-link-base px-6 py-2 bg-gradient-primary text-white rounded-lg hover:shadow-lg transition">Contacto</a>
                 </div>
-                <a href="#inicio" class="min-w-0 flex items-center justify-center gap-3 md:justify-self-end">
+                <a href="#inicio" class="ml-auto flex items-center pr-0">
                     @if($siteLogoUrl)
-                        <div class="logo-shell shrink-0 flex h-11 w-28 sm:h-14 sm:w-40 md:h-16 md:w-48 items-center justify-center rounded-xl bg-white px-2 sm:px-3 overflow-hidden max-w-full">
-                            <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="max-h-full max-w-full object-contain">
-                        </div>
+                        <img src="{{ $siteLogoUrl }}" alt="Logo {{ $holding['name'] ?? 'Tucu Group' }}" class="h-10 sm:h-12 md:h-14 w-auto max-w-[11rem] md:max-w-[14rem] object-contain">
                     @else
-                        <div class="logo-shell shrink-0 flex h-11 w-20 sm:h-14 sm:w-32 md:h-16 md:w-36 items-center justify-center rounded-xl gradient-primary text-white text-base sm:text-lg font-bold max-w-full">
+                        <div class="logo-shell flex h-10 w-20 sm:h-12 sm:w-28 md:h-14 md:w-32 items-center justify-center rounded-xl gradient-primary text-white text-base sm:text-lg font-bold">
                             TG
                         </div>
                     @endif

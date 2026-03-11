@@ -256,12 +256,12 @@
             </div>
             
             <!-- Mobile Menu -->
-            <div id="mobile-menu" class="hidden md:hidden pb-4 space-y-2 bg-white rounded-b-xl shadow-lg mx-2 mt-1">
-                <a href="#inicio" class="block px-4 py-2 text-[1.08rem] font-semibold hover:text-[#14532d] transition">Inicio</a>
-                <a href="#empresas" class="block px-4 py-2 text-[1.08rem] font-semibold hover:text-[#14532d] transition">Empresas</a>
-                <a href="#sectores" class="block px-4 py-2 text-[1.08rem] font-semibold hover:text-[#14532d] transition">Sectores</a>
-                <a href="#valores" class="block px-4 py-2 text-[1.08rem] font-semibold hover:text-[#14532d] transition">Valores</a>
-                <a href="#contacto" class="block px-4 py-2 text-[1.08rem] font-semibold bg-gradient-primary text-white rounded-lg">Contacto</a>
+            <div id="mobile-menu" class="hidden md:hidden pb-4 bg-white rounded-b-xl shadow-lg mx-2 mt-1">
+                <a href="#inicio" class="block px-4 py-3 text-[1.12rem] font-bold text-[#14532d] border-b border-gray-200 hover:bg-[#f0fdf4] transition">Inicio</a>
+                <a href="#empresas" class="block px-4 py-3 text-[1.12rem] font-bold text-[#14532d] border-b border-gray-200 hover:bg-[#f0fdf4] transition">Empresas</a>
+                <a href="#sectores" class="block px-4 py-3 text-[1.12rem] font-bold text-[#14532d] border-b border-gray-200 hover:bg-[#f0fdf4] transition">Sectores</a>
+                <a href="#valores" class="block px-4 py-3 text-[1.12rem] font-bold text-[#14532d] border-b border-gray-200 hover:bg-[#f0fdf4] transition">Valores</a>
+                <a href="#contacto" class="block px-4 py-3 mt-2 text-[1.12rem] font-bold bg-[#14532d] text-white rounded-lg shadow-lg hover:bg-[#166534] transition">Contacto</a>
             </div>
         </div>
     </nav>
